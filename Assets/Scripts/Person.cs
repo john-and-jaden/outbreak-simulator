@@ -33,8 +33,9 @@ public class Person : MonoBehaviour
 
     void OnCollisionEnter2D(Collision2D collision)
     {
-        // Vector3 normal = collision.GetContact(0).normal;
-        // direction = Vector3.Reflect(direction, normal);
+        Vector3 normal = collision.GetContact(0).normal;
+        direction = Vector3.Reflect(direction, normal);
+        rb2D.velocity = direction * speed;
         infected = true;
     }
 }
