@@ -233,8 +233,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 75bb7668ea47248ba99c0bb118afb866, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  numPeople: 25
-  distance: 10
+  numPeople: 64
+  distance: 4
   personPrefab: {fileID: 1017537500377173445, guid: fa098ac545abb4c3fab403b85626804c,
     type: 3}
 --- !u!4 &635752806

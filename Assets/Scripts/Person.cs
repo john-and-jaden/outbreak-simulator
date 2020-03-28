@@ -7,15 +7,17 @@ public class Person : MonoBehaviour
     public float speed;
     private Vector3 direction;
     private bool infected;
-    private Rigidbody2D rigidbody;
-    private SpriteRenderer spriteRenderer;
+    private Rigidbody2D rb2D;
+    private SpriteRenderer sr;
     // Start is called before the first frame update
     void Start()
     {
-        rigidbody = GetComponent<Rigidbody2D>();
-        spriteRenderer = GetComponent<SpriteRenderer>();
+        rb2D = GetComponent<Rigidbody2D>();
+        sr = GetComponent<SpriteRenderer>();
         direction = new Vector2(Random.Range(-1f, 1f), Random.Range(-1f, 1f));
-        rigidbody.velocity = direction * speed;
+        direction.Normalize();
+        rb2D.velocity = direction * speed;
+        Debug.Log(Vector3.Reflect(new Vector3(-1, 1), Vector3.down));
     }
 
     // Update is called once per frame
@@ -25,7 +27,7 @@ public class Person : MonoBehaviour
         // rigidbody.AddForce(direction * speed);
         if (infected)
         {
-            spriteRenderer.color = Color.red;
+            sr.color = Color.red;
         }
     }
 
