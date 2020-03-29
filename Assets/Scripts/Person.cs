@@ -20,7 +20,6 @@ public class Person : MonoBehaviour
         direction = new Vector2(Random.Range(-1f, 1f), Random.Range(-1f, 1f));
         direction.Normalize();
         rb2D.velocity = direction * speed;
-        Debug.Log(Vector3.Reflect(new Vector3(-1, 1), Vector3.down));
     }
 
     // Update is called once per frame
@@ -67,7 +66,15 @@ public class Person : MonoBehaviour
     void OnCollisionEnter2D(Collision2D collision)
     {
         Vector3 normal = collision.GetContact(0).normal;
-        direction = Vector3.Reflect(direction, normal);
+        if (Vector3.Dot(direction, normal) > 0)
+        {
+            Vector3 otherDirection = collision.otherRigidbody.velocity.normalized;
+            direction = (direction + otherDirection).normalized;
+        }
+        else
+        {
+            direction = Vector3.Reflect(direction, normal);
+        }
         rb2D.velocity = direction * speed;
         infected = true;
     }
