@@ -4,13 +4,29 @@ using UnityEngine;
 
 public class Controller : MonoBehaviour
 {
-    private List<Person> people;
+    // **************************** //
+    // ***** Public variables ***** //
+    // **************************** //
+
+    [Tooltip("Number of people to be spawned.")]
     public int numPeople;
-    public float distance;
+    [Tooltip("Distance between each person when spawned in a grid.")]
+    public float spawnGapDistance;
+    [Tooltip("Prefab of the person object to spawn.")]
     public Person personPrefab;
+    [Tooltip("Initial number of infected people.")]
     public int initialNumberOfCases;
 
-    // Start is called before the first frame update
+    // ***************************** //
+    // ***** Private variables ***** //
+    // ***************************** //
+
+    private List<Person> people;
+
+    // *************************** //
+    // ***** Unity functions ***** //
+    // *************************** //
+
     void Start()
     {
         people = new List<Person>();
@@ -19,8 +35,8 @@ public class Controller : MonoBehaviour
         {
             for (int j = 0; j < sideLength; j++)
             {
-                float x = i * distance - sideLength * distance / 2;
-                float y = j * distance - sideLength * distance / 2;
+                float x = i * spawnGapDistance - sideLength * spawnGapDistance / 2;
+                float y = j * spawnGapDistance - sideLength * spawnGapDistance / 2;
                 Person person = Instantiate(personPrefab, new Vector3(x, y), Quaternion.identity);
                 people.Add(person);
             }
@@ -29,11 +45,14 @@ public class Controller : MonoBehaviour
         InfectInitialPatients();
     }
 
-    // Update is called once per frame
     void Update()
     {
 
     }
+
+    // ***************************** //
+    // ***** Private functions ***** //
+    // ***************************** //
 
     private void InfectInitialPatients()
     {

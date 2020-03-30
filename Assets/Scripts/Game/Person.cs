@@ -4,29 +4,47 @@ using UnityEngine;
 
 public class Person : MonoBehaviour
 {
+    // **************************** //
+    // ***** Public variables ***** //
+    // **************************** //
+
+    [Tooltip("Current infection status of a person.")]
     public InfectionStatus infectionStatus;
+    [Tooltip("Units per second that a person moves.")]
     public float movementSpeed;
-    [Tooltip("This is specified in degrees.")]
+    [Tooltip("The radius around a person in which other people can become infected.")]
+    public float spreadRadius;
+    [Tooltip("Max rotation of a person's direction in degrees per second.")]
     public float maxAngleDeltaPerSecond;
+
+    // ***************************** //
+    // ***** Private variables ***** //
+    // ***************************** //
+
     private Vector3 direction;
     private float perlinCoordinate;
-    private Rigidbody2D rb2D;
-    private SpriteRenderer sr;
-    private CircleCollider2D cc2D;
     public float recoveryDuration;
     public float recoveryTimer;
 
-    // Start is called before the first frame update
+    // **************************** //
+    // ***** Helper variables ***** //
+    // **************************** //
+
+    private SpriteRenderer sr;
+    private CircleCollider2D cc2D;
+
+    // *************************** //
+    // ***** Unity functions ***** //
+    // *************************** //
+
     void Start()
     {
-        rb2D = GetComponent<Rigidbody2D>();
         sr = GetComponent<SpriteRenderer>();
         cc2D = GetComponent<CircleCollider2D>();
         direction = new Vector2(Random.Range(-1f, 1f), Random.Range(-1f, 1f)).normalized;
         perlinCoordinate = Random.Range(0, 1000);
     }
 
-    // Update is called once per frame
     void Update()
     {
         Move();
@@ -34,6 +52,36 @@ public class Person : MonoBehaviour
         UpdateInfectionStatus();
         UpdateColor();
     }
+
+    void OnCollisionEnter2D(Collision2D collision)
+    {
+        Vector3 dirToOther = collision.transform.position - transform.position;
+
+        // If we are just ran into the other person
+        if (Vector3.Dot(direction, dirToOther) > 0)
+        {
+            Vector3 normal = collision.GetContact(0).normal;
+            direction = Vector3.Reflect(direction, normal);
+        }
+
+        if (collision.gameObject.GetComponent<Person>().infectionStatus == InfectionStatus.INFECTED && infectionStatus == InfectionStatus.HEALTHY)
+        {
+            infectionStatus = InfectionStatus.INFECTED;
+        }
+    }
+
+    // **************************** //
+    // ***** Public functions ***** //
+    // **************************** //
+
+    public void SetInfectionStatus(InfectionStatus newStatus)
+    {
+        infectionStatus = newStatus;
+    }
+
+    // ***************************** //
+    // ***** Private functions ***** //
+    // ***************************** //
 
     private void Move()
     {
@@ -107,27 +155,5 @@ public class Person : MonoBehaviour
         {
             sr.color = Color.green;
         }
-    }
-
-    void OnCollisionEnter2D(Collision2D collision)
-    {
-        Vector3 dirToOther = collision.transform.position - transform.position;
-
-        // If we are just ran into the other person
-        if (Vector3.Dot(direction, dirToOther) > 0)
-        {
-            Vector3 normal = collision.GetContact(0).normal;
-            direction = Vector3.Reflect(direction, normal);
-        }
-
-        if (collision.gameObject.GetComponent<Person>().infectionStatus == InfectionStatus.INFECTED && infectionStatus == InfectionStatus.HEALTHY)
-        {
-            infectionStatus = InfectionStatus.INFECTED;
-        }
-    }
-
-    public void SetInfectionStatus(InfectionStatus newStatus)
-    {
-        infectionStatus = newStatus;
     }
 }
