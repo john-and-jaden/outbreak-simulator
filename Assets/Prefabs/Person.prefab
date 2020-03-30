@@ -10,9 +10,9 @@ GameObject:
   m_Component:
   - component: {fileID: 1017537500377173451}
   - component: {fileID: 1017537500377173450}
-  - component: {fileID: 1017537500377173445}
   - component: {fileID: 1017537500377173449}
   - component: {fileID: 1017537500377173448}
+  - component: {fileID: 1017537500377173445}
   m_Layer: 0
   m_Name: Person
   m_TagString: Untagged
@@ -84,19 +84,6 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!114 &1017537500377173445
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1017537500377173444}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 07e9c4177201a4cd4a9d08f716dc6a95, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  speed: 3
 --- !u!50 &1017537500377173449
 Rigidbody2D:
   serializedVersion: 4
@@ -134,3 +121,17 @@ CircleCollider2D:
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
   m_Radius: 0.5
+--- !u!114 &1017537500377173445
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1017537500377173444}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 07e9c4177201a4cd4a9d08f716dc6a95, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  speed: 3
+  maxAngleDeltaPerSecond: 150

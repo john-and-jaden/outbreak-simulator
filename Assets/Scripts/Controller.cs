@@ -8,6 +8,7 @@ public class Controller : MonoBehaviour
     public int numPeople;
     public float distance;
     public Person personPrefab;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -21,7 +22,6 @@ public class Controller : MonoBehaviour
                 float y = j * distance - sideLength * distance / 2;
                 Person person = Instantiate(personPrefab, new Vector3(x, y), Quaternion.identity);
             }
-
         }
     }
 

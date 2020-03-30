@@ -4,9 +4,16 @@ using UnityEngine;
 
 public class Person : MonoBehaviour
 {
+    public enum InfectionStatus
+    {
+        HEALTHY = 0, INFECTED = 1, RECOVERED = 2
+    }
+    public InfectionStatus status;
     public float speed;
+    [Tooltip("This is specified in degrees.")]
+    public float maxAngleDeltaPerSecond;
     private Vector3 direction;
-    private bool infected;
+    private float perlinCoordinate;
     private Rigidbody2D rb2D;
     private SpriteRenderer sr;
     private CircleCollider2D cc2D;
@@ -17,65 +24,84 @@ public class Person : MonoBehaviour
         rb2D = GetComponent<Rigidbody2D>();
         sr = GetComponent<SpriteRenderer>();
         cc2D = GetComponent<CircleCollider2D>();
-        direction = new Vector2(Random.Range(-1f, 1f), Random.Range(-1f, 1f));
-        direction.Normalize();
-        rb2D.velocity = direction * speed;
+        direction = new Vector2(Random.Range(-1f, 1f), Random.Range(-1f, 1f)).normalized;
+        perlinCoordinate = Random.Range(0, 1000);
+        // rb2D.velocity = direction * speed;
     }
 
     // Update is called once per frame
     void Update()
     {
-        // transform.position += direction * speed * Time.deltaTime;
-        // rigidbody.AddForce(direction * speed);
-        if (infected)
+        Move();
+        CollideWithScreenEdges();
+
+        if (status == InfectionStatus.INFECTED)
         {
             sr.color = Color.red;
         }
+    }
 
-        CollideWithScreenEdges();
+    private void Move()
+    {
+        // The value used to move through perlin coordinates - bigger is more chaotic
+        perlinCoordinate += Time.deltaTime;
+        // Value between -1 and 1
+        float perlinScale = (Mathf.PerlinNoise(perlinCoordinate, 0f) * 2) - 1;
+        // The amount by which we should rotate the direction this frame
+        float angleDelta = maxAngleDeltaPerSecond * perlinScale * Time.deltaTime;
+        // Rotate the direction
+        direction = Quaternion.AngleAxis(angleDelta, Vector3.forward) * direction;
+        // Move the person in the given direction
+        transform.position += direction * speed * Time.deltaTime;
     }
 
     private void CollideWithScreenEdges()
     {
-        Vector3 leftEdgeTempVec = transform.position - new Vector3(cc2D.radius, 0);
-        Vector3 pos = Camera.main.WorldToViewportPoint(leftEdgeTempVec);
-        if (pos.x < 0.0)
+        // Store these values in local variables just for shorter names
+        float radius = cc2D.radius;
+        Vector3 pos = transform.position;
+
+        // Get the edges of the camera viewport in world coordinates
+        float topEdge = Camera.main.ViewportToWorldPoint(Vector3.up).y;
+        float bottomEdge = Camera.main.ViewportToWorldPoint(Vector3.zero).y;
+        float leftEdge = Camera.main.ViewportToWorldPoint(Vector3.zero).x;
+        float rightEdge = Camera.main.ViewportToWorldPoint(Vector3.right).x;
+
+        // Bounce the person off of the edges
+        if (pos.x < leftEdge + radius)
         {
-            rb2D.velocity = Vector3.Reflect(rb2D.velocity, Vector3.right);
+            direction = Vector3.Reflect(direction, Vector2.right);
         }
-        Vector3 rightEdgeTempVec = transform.position + new Vector3(cc2D.radius, 0);
-        pos = Camera.main.WorldToViewportPoint(rightEdgeTempVec);
-        if (pos.x > 1.0)
+        if (pos.x > rightEdge - radius)
         {
-            rb2D.velocity = Vector3.Reflect(rb2D.velocity, Vector3.right);
+            direction = Vector3.Reflect(direction, Vector2.left);
         }
-        Vector3 bottomEdgeTempVec = transform.position - new Vector3(0, cc2D.radius);
-        pos = Camera.main.WorldToViewportPoint(bottomEdgeTempVec);
-        if (pos.y < 0.0)
+        if (pos.y < bottomEdge + radius)
         {
-            rb2D.velocity = Vector3.Reflect(rb2D.velocity, Vector3.down);
+            direction = Vector3.Reflect(direction, Vector2.up);
         }
-        Vector3 topEdgeTempVec = transform.position + new Vector3(0, cc2D.radius);
-        pos = Camera.main.WorldToViewportPoint(topEdgeTempVec);
-        if (pos.y > 1.0)
+        if (pos.y > topEdge - radius)
         {
-            rb2D.velocity = Vector3.Reflect(rb2D.velocity, Vector3.up);
+            direction = Vector3.Reflect(direction, Vector2.down);
         }
+
+        // Clamp the position of the person to the screen space
+        float x = Mathf.Clamp(transform.position.x, leftEdge + radius, rightEdge - radius);
+        float y = Mathf.Clamp(transform.position.y, bottomEdge + radius, topEdge - radius);
+        transform.position = new Vector3(x, y);
     }
 
     void OnCollisionEnter2D(Collision2D collision)
     {
-        Vector3 normal = collision.GetContact(0).normal;
-        if (Vector3.Dot(direction, normal) > 0)
+        Vector3 dirToOther = collision.transform.position - transform.position;
+
+        // If we are just ran into the other person
+        if (Vector3.Dot(direction, dirToOther) > 0)
         {
-            Vector3 otherDirection = collision.otherRigidbody.velocity.normalized;
-            direction = (direction + otherDirection).normalized;
-        }
-        else
-        {
+            Vector3 normal = collision.GetContact(0).normal;
             direction = Vector3.Reflect(direction, normal);
         }
-        rb2D.velocity = direction * speed;
-        infected = true;
+
+        status = InfectionStatus.INFECTED;
     }
 }
