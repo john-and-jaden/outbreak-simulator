@@ -8,6 +8,7 @@ public class Controller : MonoBehaviour
     public int numPeople;
     public float distance;
     public Person personPrefab;
+    public int initialNumberOfCases;
 
     // Start is called before the first frame update
     void Start()
@@ -21,13 +22,24 @@ public class Controller : MonoBehaviour
                 float x = i * distance - sideLength * distance / 2;
                 float y = j * distance - sideLength * distance / 2;
                 Person person = Instantiate(personPrefab, new Vector3(x, y), Quaternion.identity);
+                people.Add(person);
             }
         }
+        
+        infectInitialPatients();
     }
 
     // Update is called once per frame
     void Update()
     {
 
+    }
+
+    void infectInitialPatients()
+    {
+        for (int i = 0; i < initialNumberOfCases; i++)
+        {
+            people[i].SetInfectionStatus(1);
+        }
     }
 }

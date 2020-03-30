@@ -133,5 +133,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 07e9c4177201a4cd4a9d08f716dc6a95, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 3
+  infectionStatus: 0
+  speed: 4
   maxAngleDeltaPerSecond: 150
+  recoveryDuration: 10
+  recoveryTimer: 0

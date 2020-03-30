@@ -8,7 +8,7 @@ public class Person : MonoBehaviour
     {
         HEALTHY = 0, INFECTED = 1, RECOVERED = 2
     }
-    public InfectionStatus status;
+    public InfectionStatus infectionStatus;
     public float speed;
     [Tooltip("This is specified in degrees.")]
     public float maxAngleDeltaPerSecond;
@@ -17,6 +17,8 @@ public class Person : MonoBehaviour
     private Rigidbody2D rb2D;
     private SpriteRenderer sr;
     private CircleCollider2D cc2D;
+    public float recoveryDuration;
+    public float recoveryTimer;
 
     // Start is called before the first frame update
     void Start()
@@ -34,11 +36,8 @@ public class Person : MonoBehaviour
     {
         Move();
         CollideWithScreenEdges();
-
-        if (status == InfectionStatus.INFECTED)
-        {
-            sr.color = Color.red;
-        }
+        UpdateInfectionStatus();
+        UpdateColor();
     }
 
     private void Move()
@@ -91,6 +90,30 @@ public class Person : MonoBehaviour
         transform.position = new Vector3(x, y);
     }
 
+    private void UpdateInfectionStatus()
+    {
+        if (infectionStatus == InfectionStatus.INFECTED)
+        {
+            recoveryTimer += Time.deltaTime;
+            if (recoveryTimer >= recoveryDuration)
+            {
+                infectionStatus = InfectionStatus.RECOVERED;
+            }
+        }
+    }
+
+    private void UpdateColor()
+    {
+        if (infectionStatus == InfectionStatus.INFECTED)
+        {
+            sr.color = Color.red;
+        }
+        else if (infectionStatus == InfectionStatus.RECOVERED)
+        {
+            sr.color = Color.green;
+        }
+    }
+
     void OnCollisionEnter2D(Collision2D collision)
     {
         Vector3 dirToOther = collision.transform.position - transform.position;
@@ -102,6 +125,14 @@ public class Person : MonoBehaviour
             direction = Vector3.Reflect(direction, normal);
         }
 
-        status = InfectionStatus.INFECTED;
+        if (collision.gameObject.GetComponent<Person>().infectionStatus == InfectionStatus.INFECTED && infectionStatus == InfectionStatus.HEALTHY)
+        {
+            infectionStatus = InfectionStatus.INFECTED;
+        }
+    }
+
+    public void SetInfectionStatus(int newStatus)
+    {
+        infectionStatus = (InfectionStatus)newStatus;
     }
 }
