@@ -230,14 +230,14 @@ MonoBehaviour:
   m_GameObject: {fileID: 635752804}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 75bb7668ea47248ba99c0bb118afb866, type: 3}
+  m_Script: {fileID: 11500000, guid: d6e70cd4bc78e9e4ea8bef1307611556, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  numPeople: 64
-  distance: 4
+  numPeople: 100
+  spawnGapDistance: 4
   personPrefab: {fileID: 1017537500377173445, guid: fa098ac545abb4c3fab403b85626804c,
     type: 3}
-  initialNumberOfCases: 10
+  initialNumberOfCases: 3
 --- !u!4 &635752806
 Transform:
   m_ObjectHideFlags: 0

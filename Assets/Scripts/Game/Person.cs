@@ -16,6 +16,8 @@ public class Person : MonoBehaviour
   public float spreadRadius;
   [Tooltip("Max rotation of a person's direction in degrees per second.")]
   public float maxAngleDeltaPerSecond;
+  [Tooltip("The amount of time a person will take to recover since becoming infected.")]
+  public float recoveryDuration;
 
   // ***************************** //
   // ***** Private variables ***** //
@@ -23,8 +25,7 @@ public class Person : MonoBehaviour
 
   private Vector3 direction;
   private float perlinCoordinate;
-  public float recoveryDuration;
-  public float recoveryTimer;
+  private float recoveryTimer;
 
   // **************************** //
   // ***** Helper variables ***** //
