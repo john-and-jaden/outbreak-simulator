@@ -26,7 +26,7 @@ public class Controller : MonoBehaviour
             }
         }
         
-        infectInitialPatients();
+        InfectInitialPatients();
     }
 
     // Update is called once per frame
@@ -35,11 +35,11 @@ public class Controller : MonoBehaviour
 
     }
 
-    void infectInitialPatients()
+    private void InfectInitialPatients()
     {
         for (int i = 0; i < initialNumberOfCases; i++)
         {
-            people[i].SetInfectionStatus(1);
+            people[i].SetInfectionStatus(InfectionStatus.INFECTED);
         }
     }
 }

@@ -4,12 +4,8 @@ using UnityEngine;
 
 public class Person : MonoBehaviour
 {
-    public enum InfectionStatus
-    {
-        HEALTHY = 0, INFECTED = 1, RECOVERED = 2
-    }
     public InfectionStatus infectionStatus;
-    public float speed;
+    public float movementSpeed;
     [Tooltip("This is specified in degrees.")]
     public float maxAngleDeltaPerSecond;
     private Vector3 direction;
@@ -28,7 +24,6 @@ public class Person : MonoBehaviour
         cc2D = GetComponent<CircleCollider2D>();
         direction = new Vector2(Random.Range(-1f, 1f), Random.Range(-1f, 1f)).normalized;
         perlinCoordinate = Random.Range(0, 1000);
-        // rb2D.velocity = direction * speed;
     }
 
     // Update is called once per frame
@@ -51,7 +46,7 @@ public class Person : MonoBehaviour
         // Rotate the direction
         direction = Quaternion.AngleAxis(angleDelta, Vector3.forward) * direction;
         // Move the person in the given direction
-        transform.position += direction * speed * Time.deltaTime;
+        transform.position += direction * movementSpeed * Time.deltaTime;
     }
 
     private void CollideWithScreenEdges()
@@ -131,8 +126,8 @@ public class Person : MonoBehaviour
         }
     }
 
-    public void SetInfectionStatus(int newStatus)
+    public void SetInfectionStatus(InfectionStatus newStatus)
     {
-        infectionStatus = (InfectionStatus)newStatus;
+        infectionStatus = newStatus;
     }
 }
