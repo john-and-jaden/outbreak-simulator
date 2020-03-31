@@ -77,6 +77,7 @@ public class Person : MonoBehaviour
       InfectNearbyPeople();
       UpdateRecovery();
     }
+    DrawInfectionRadius();
   }
 
   void OnCollisionEnter2D(Collision2D collision)
@@ -210,4 +211,24 @@ public class Person : MonoBehaviour
       sr.color = recoveredColor;
     }
   }
+  private void DrawInfectionRadius()
+  {
+    LineRenderer line = gameObject.AddComponent<LineRenderer>();
+    int segments = 50;
+    line.positionCount = segments + 1;
+    line.useWorldSpace = false;
+    float angle = 1f;
+    float radius = 0.3f;
+    for (int i = 0; i < segments + 1; i++)
+    {
+      float x = Mathf.Sin(Mathf.Deg2Rad * angle) * radius;
+      float y = Mathf.Cos(Mathf.Deg2Rad * angle) * radius;
+
+      line.SetPosition(i, new Vector3(x, y, 0));
+
+      angle += (360f / segments);
+    }
+  }
 }
+
+
