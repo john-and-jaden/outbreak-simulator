@@ -15,7 +15,10 @@ public class Person : MonoBehaviour
   public float maxAngleDeltaPerSecond;
 
   [Tooltip("The radius around a person in which other people can become infected.")]
-  public float spreadRadius;
+  public float maxInfectionRadius;
+
+  [Tooltip("The time since becoming infected for the infection radius to reach max value.")]
+  public float timeToReachFullContagion;
 
   [Tooltip("The amount of time a person will take to recover since becoming infected.")]
   public float recoveryDuration;
@@ -32,6 +35,7 @@ public class Person : MonoBehaviour
 
   private InfectionStatus infectionStatus;
   private Vector3 direction;
+  private float infectionRadius;
   private float perlinCoordinate;
   private float recoveryTimer;
   private Collider2D[] nearbyPeople;
@@ -112,9 +116,14 @@ public class Person : MonoBehaviour
     transform.position += direction * movementSpeed * Time.deltaTime;
   }
 
+  private void UpdateInfectionRadius()
+  {
+
+  }
+
   private void InfectNearbyPeople()
   {
-    int numTargets = Physics2D.OverlapCircleNonAlloc(transform.position, spreadRadius, nearbyPeople);
+    int numTargets = Physics2D.OverlapCircleNonAlloc(transform.position, maxInfectionRadius, nearbyPeople);
     for (int i = 0; i < numTargets; i++)
     {
       GameObject target = nearbyPeople[i].gameObject;
