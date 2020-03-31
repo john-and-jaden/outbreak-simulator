@@ -10,10 +10,13 @@ public class Controller : MonoBehaviour
 
   [Tooltip("Number of people to be spawned.")]
   public int numPeople;
+
   [Tooltip("Distance between each person when spawned in a grid.")]
   public float spawnGapDistance;
+
   [Tooltip("Prefab of the person object to spawn.")]
   public Person personPrefab;
+
   [Tooltip("Initial number of infected people.")]
   public int initialNumberOfCases;
 

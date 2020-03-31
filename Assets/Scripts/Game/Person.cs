@@ -8,24 +8,33 @@ public class Person : MonoBehaviour
   // ***** Public variables ***** //
   // **************************** //
 
-  [Tooltip("Current infection status of a person.")]
-  public InfectionStatus infectionStatus;
   [Tooltip("Units per second that a person moves.")]
   public float movementSpeed;
-  [Tooltip("The radius around a person in which other people can become infected.")]
-  public float spreadRadius;
+
   [Tooltip("Max rotation of a person's direction in degrees per second.")]
   public float maxAngleDeltaPerSecond;
+
+  [Tooltip("The radius around a person in which other people can become infected.")]
+  public float spreadRadius;
+
   [Tooltip("The amount of time a person will take to recover since becoming infected.")]
   public float recoveryDuration;
+
+  [Tooltip("The color of infected people.")]
+  public Color infectedColor;
+
+  [Tooltip("The color of recovered people.")]
+  public Color recoveredColor;
 
   // ***************************** //
   // ***** Private variables ***** //
   // ***************************** //
 
+  private InfectionStatus infectionStatus;
   private Vector3 direction;
   private float perlinCoordinate;
   private float recoveryTimer;
+  private Collider2D[] nearbyPeople;
 
   // **************************** //
   // ***** Helper variables ***** //
@@ -38,20 +47,29 @@ public class Person : MonoBehaviour
   // ***** Unity functions ***** //
   // *************************** //
 
-  void Start()
+  void Awake()
   {
+    // Initialize component helper variables
     sr = GetComponent<SpriteRenderer>();
     cc2D = GetComponent<CircleCollider2D>();
+
+    // Initialize start values
+    infectionStatus = InfectionStatus.HEALTHY;
     direction = new Vector2(Random.Range(-1f, 1f), Random.Range(-1f, 1f)).normalized;
     perlinCoordinate = Random.Range(0, 1000);
+    // For efficiency, people can infect up to 5 other nearby people at a time
+    nearbyPeople = new Collider2D[5];
   }
 
   void Update()
   {
     Move();
     CollideWithScreenEdges();
-    UpdateInfectionStatus();
-    UpdateColor();
+    if (infectionStatus == InfectionStatus.INFECTED)
+    {
+      InfectNearbyPeople();
+      UpdateRecovery();
+    }
   }
 
   void OnCollisionEnter2D(Collision2D collision)
@@ -64,11 +82,6 @@ public class Person : MonoBehaviour
       Vector3 normal = collision.GetContact(0).normal;
       direction = Vector3.Reflect(direction, normal);
     }
-
-    if (collision.gameObject.GetComponent<Person>().infectionStatus == InfectionStatus.INFECTED && infectionStatus == InfectionStatus.HEALTHY)
-    {
-      infectionStatus = InfectionStatus.INFECTED;
-    }
   }
 
   // **************************** //
@@ -78,6 +91,7 @@ public class Person : MonoBehaviour
   public void SetInfectionStatus(InfectionStatus newStatus)
   {
     infectionStatus = newStatus;
+    UpdateColor();
   }
 
   // ***************************** //
@@ -96,6 +110,33 @@ public class Person : MonoBehaviour
     direction = Quaternion.AngleAxis(angleDelta, Vector3.forward) * direction;
     // Move the person in the given direction
     transform.position += direction * movementSpeed * Time.deltaTime;
+  }
+
+  private void InfectNearbyPeople()
+  {
+    int numTargets = Physics2D.OverlapCircleNonAlloc(transform.position, spreadRadius, nearbyPeople);
+    for (int i = 0; i < numTargets; i++)
+    {
+      GameObject target = nearbyPeople[i].gameObject;
+
+      // Don't target yourself, dummy!
+      if (target == gameObject)
+      {
+        continue;
+      }
+
+      // Check if the target is actually a Person
+      Person targetPerson;
+      if (target.TryGetComponent<Person>(out targetPerson))
+      {
+        // Only infect healthy people
+        if (targetPerson.infectionStatus == InfectionStatus.HEALTHY)
+        {
+          Debug.Log("INFECT THAT BOI");
+          targetPerson.SetInfectionStatus(InfectionStatus.INFECTED);
+        }
+      }
+    }
   }
 
   private void CollideWithScreenEdges()
@@ -134,15 +175,12 @@ public class Person : MonoBehaviour
     transform.position = new Vector3(x, y);
   }
 
-  private void UpdateInfectionStatus()
+  private void UpdateRecovery()
   {
-    if (infectionStatus == InfectionStatus.INFECTED)
+    recoveryTimer += Time.deltaTime;
+    if (recoveryTimer >= recoveryDuration)
     {
-      recoveryTimer += Time.deltaTime;
-      if (recoveryTimer >= recoveryDuration)
-      {
-        infectionStatus = InfectionStatus.RECOVERED;
-      }
+      SetInfectionStatus(InfectionStatus.RECOVERED);
     }
   }
 
@@ -150,11 +188,11 @@ public class Person : MonoBehaviour
   {
     if (infectionStatus == InfectionStatus.INFECTED)
     {
-      sr.color = Color.red;
+      sr.color = infectedColor;
     }
     else if (infectionStatus == InfectionStatus.RECOVERED)
     {
-      sr.color = Color.green;
+      sr.color = recoveredColor;
     }
   }
 }
