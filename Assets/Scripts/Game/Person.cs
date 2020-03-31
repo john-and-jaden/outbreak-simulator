@@ -60,6 +60,7 @@ public class Person : MonoBehaviour
     // Initialize start values
     infectionStatus = InfectionStatus.HEALTHY;
     direction = new Vector2(Random.Range(-1f, 1f), Random.Range(-1f, 1f)).normalized;
+    infectionRadius = cc2D.radius;
     perlinCoordinate = Random.Range(0, 1000);
     // For efficiency, people can infect up to 5 other nearby people at a time
     nearbyPeople = new Collider2D[5];
@@ -69,8 +70,10 @@ public class Person : MonoBehaviour
   {
     Move();
     CollideWithScreenEdges();
+
     if (infectionStatus == InfectionStatus.INFECTED)
     {
+      UpdateInfectionRadius();
       InfectNearbyPeople();
       UpdateRecovery();
     }
@@ -118,12 +121,16 @@ public class Person : MonoBehaviour
 
   private void UpdateInfectionRadius()
   {
-
+    if (infectionRadius < maxInfectionRadius)
+    {
+      infectionRadius += Time.deltaTime / timeToReachFullContagion;
+      infectionRadius = Mathf.Clamp(infectionRadius, 0, maxInfectionRadius);
+    }
   }
 
   private void InfectNearbyPeople()
   {
-    int numTargets = Physics2D.OverlapCircleNonAlloc(transform.position, maxInfectionRadius, nearbyPeople);
+    int numTargets = Physics2D.OverlapCircleNonAlloc(transform.position, infectionRadius, nearbyPeople);
     for (int i = 0; i < numTargets; i++)
     {
       GameObject target = nearbyPeople[i].gameObject;
@@ -141,7 +148,6 @@ public class Person : MonoBehaviour
         // Only infect healthy people
         if (targetPerson.infectionStatus == InfectionStatus.HEALTHY)
         {
-          Debug.Log("INFECT THAT BOI");
           targetPerson.SetInfectionStatus(InfectionStatus.INFECTED);
         }
       }
