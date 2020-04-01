@@ -32,7 +32,7 @@ public class InfectionRadiusRenderer : MonoBehaviour
   // **************************** //
   public void setRadius(float radius)
   {
-    sr.size = new Vector2(radius, radius);
+    sr.size = new Vector2(radius * 2, radius * 2);
   }
   public void SetShowInfectionRadius(bool showInfectionRadius)
   {
