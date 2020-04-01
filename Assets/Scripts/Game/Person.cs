@@ -29,6 +29,8 @@ public class Person : MonoBehaviour
   [Tooltip("The color of recovered people.")]
   public Color recoveredColor;
 
+  [Tooltip("Prefab of the InfectionRadiusRenderer object to spawn.")]
+  public InfectionRadiusRenderer infectionRadiusRendererPrefab;
   // ***************************** //
   // ***** Private variables ***** //
   // ***************************** //
@@ -39,7 +41,7 @@ public class Person : MonoBehaviour
   private float perlinCoordinate;
   private float recoveryTimer;
   private Collider2D[] nearbyPeople;
-
+  private InfectionRadiusRenderer infectionRadiusRenderer;
   // **************************** //
   // ***** Helper variables ***** //
   // **************************** //
@@ -64,6 +66,8 @@ public class Person : MonoBehaviour
     perlinCoordinate = Random.Range(0, 1000);
     // For efficiency, people can infect up to 5 other nearby people at a time
     nearbyPeople = new Collider2D[5];
+
+    infectionRadiusRenderer = Instantiate(infectionRadiusRendererPrefab, Vector3.zero, Quaternion.identity);
   }
 
   void Update()
@@ -77,7 +81,6 @@ public class Person : MonoBehaviour
       InfectNearbyPeople();
       UpdateRecovery();
     }
-    DrawInfectionRadius();
   }
 
   void OnCollisionEnter2D(Collision2D collision)
@@ -102,6 +105,10 @@ public class Person : MonoBehaviour
     UpdateColor();
   }
 
+  public void SetShowInfectionRadius(bool showInfectionRadius)
+  {
+    infectionRadiusRenderer.SetShowInfectionRadius(showInfectionRadius);
+  }
   // ***************************** //
   // ***** Private functions ***** //
   // ***************************** //
@@ -118,6 +125,8 @@ public class Person : MonoBehaviour
     direction = Quaternion.AngleAxis(angleDelta, Vector3.forward) * direction;
     // Move the person in the given direction
     transform.position += direction * movementSpeed * Time.deltaTime;
+
+    infectionRadiusRenderer.transform.position = transform.position;
   }
 
   private void UpdateInfectionRadius()
@@ -126,6 +135,7 @@ public class Person : MonoBehaviour
     {
       infectionRadius += Time.deltaTime / timeToReachFullContagion;
       infectionRadius = Mathf.Clamp(infectionRadius, 0, maxInfectionRadius);
+      infectionRadiusRenderer.setRadius(infectionRadius);
     }
   }
 
@@ -209,24 +219,6 @@ public class Person : MonoBehaviour
     else if (infectionStatus == InfectionStatus.RECOVERED)
     {
       sr.color = recoveredColor;
-    }
-  }
-  private void DrawInfectionRadius()
-  {
-    LineRenderer line = gameObject.AddComponent<LineRenderer>();
-    int segments = 50;
-    line.positionCount = segments + 1;
-    line.useWorldSpace = false;
-    float angle = 1f;
-    float radius = 0.3f;
-    for (int i = 0; i < segments + 1; i++)
-    {
-      float x = Mathf.Sin(Mathf.Deg2Rad * angle) * radius;
-      float y = Mathf.Cos(Mathf.Deg2Rad * angle) * radius;
-
-      line.SetPosition(i, new Vector3(x, y, 0));
-
-      angle += (360f / segments);
     }
   }
 }

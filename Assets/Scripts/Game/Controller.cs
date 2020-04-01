@@ -20,6 +20,8 @@ public class Controller : MonoBehaviour
   [Tooltip("Initial number of infected people.")]
   public int initialNumberOfCases;
 
+  [Tooltip("Whether or not to display infected people's infection radiuses.")]
+  public bool showInfectionRadius;
   // ***************************** //
   // ***** Private variables ***** //
   // ***************************** //
@@ -50,7 +52,9 @@ public class Controller : MonoBehaviour
 
   void Update()
   {
-
+    foreach(Person person in people) {
+      person.SetShowInfectionRadius(showInfectionRadius);
+    }
   }
 
   // ***************************** //
