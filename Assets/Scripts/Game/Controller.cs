@@ -22,6 +22,9 @@ public class Controller : MonoBehaviour
 
   [Tooltip("Whether or not to display infected people's infection radiuses.")]
   public bool showInfectionRadius;
+
+  [Tooltip("The scale at which time passes.")]
+  public float timeScale;
   // ***************************** //
   // ***** Private variables ***** //
   // ***************************** //
@@ -52,9 +55,14 @@ public class Controller : MonoBehaviour
 
   void Update()
   {
-    foreach(Person person in people) {
+    // update whether or not to show people's infection radius
+    foreach (Person person in people)
+    {
       person.SetShowInfectionRadius(showInfectionRadius);
     }
+
+    // update the time scale
+    Time.timeScale = timeScale;
   }
 
   // ***************************** //
