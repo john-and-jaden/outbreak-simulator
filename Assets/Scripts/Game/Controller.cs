@@ -38,13 +38,28 @@ public class Controller : MonoBehaviour
   void Start()
   {
     people = new List<Person>();
-    int sideLength = (int)Mathf.Sqrt(numPeople);
-    for (int i = 0; i < sideLength; i++)
+
+    // Get the edges of the camera viewport in world coordinates
+    float topEdge = Camera.main.ViewportToWorldPoint(Vector3.up).y;
+    float bottomEdge = Camera.main.ViewportToWorldPoint(Vector3.zero).y;
+    float leftEdge = Camera.main.ViewportToWorldPoint(Vector3.zero).x;
+    float rightEdge = Camera.main.ViewportToWorldPoint(Vector3.right).x;
+
+    // Debug.Log(topEdge); // 20 
+    // Debug.Log(bottomEdge); // -20 
+    // Debug.Log(leftEdge); // 30
+    // Debug.Log(rightEdge); // -30 
+
+    float squareSideLength = 10;
+    float circleRadius = 1;
+
+    for (float i = leftEdge; i < rightEdge - (circleRadius * 2); i += squareSideLength)
     {
-      for (int j = 0; j < sideLength; j++)
+      for (float j = topEdge; j > bottomEdge + (circleRadius * 2); j -= squareSideLength)
       {
-        float x = i * spawnGapDistance - sideLength * spawnGapDistance / 2;
-        float y = j * spawnGapDistance - sideLength * spawnGapDistance / 2;
+        float x = i + Random.Range(circleRadius, squareSideLength - circleRadius);
+        float y = j - Random.Range(circleRadius, squareSideLength - circleRadius);
+
         Person person = Instantiate(personPrefab, new Vector3(x, y), Quaternion.identity);
         people.Add(person);
       }

@@ -237,8 +237,9 @@ MonoBehaviour:
   spawnGapDistance: 4
   personPrefab: {fileID: 1017537500377173445, guid: fa098ac545abb4c3fab403b85626804c,
     type: 3}
-  initialNumberOfCases: 3
-  showInfectionRadius: 0
+  initialNumberOfCases: 2
+  showInfectionRadius: 1
+  timeScale: 2.05
 --- !u!4 &635752806
 Transform:
   m_ObjectHideFlags: 0
