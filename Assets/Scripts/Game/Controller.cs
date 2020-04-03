@@ -45,36 +45,30 @@ public class Controller : MonoBehaviour
     float leftEdge = Camera.main.ViewportToWorldPoint(Vector3.zero).x;
     float rightEdge = Camera.main.ViewportToWorldPoint(Vector3.right).x;
 
-    // Debug.Log(topEdge); // 20 
-    // Debug.Log(bottomEdge); // -20 
-    // Debug.Log(leftEdge); // -30
-    // Debug.Log(rightEdge); // 30 
-
-    // our algorithm relies on these values, but the first one will be a user-input further along
-    float squareSideLength = 3;
+    // our algorithm relies on these values, but the first one will eventually become a user-input one.
+    float squareSideLength = 2;
     float circleRadius = 1;
 
     // get the width and height of the screen
     float screenWidth = rightEdge - leftEdge;
     float screenHeight = topEdge - bottomEdge;
 
-    // calculate the offset we will start the grid from on the left and the top.
-    // this is to make sure our grid, albeit random, is centered.
-    float horizontalOffset = (screenWidth % squareSideLength) / 2F;
-    float verticalOffset = (screenHeight % squareSideLength) / 2F;
+    // get the number of squares we can fit on the screen
+    int gridWidth = (int)(screenWidth / squareSideLength);
+    int gridHeight = (int)(screenHeight / squareSideLength);
 
-    // we could have put these values directly in the for loop, but they are here
-    // for readability only.
-    float leftBoundary = leftEdge + horizontalOffset;
-    float rightBoundary = rightEdge + horizontalOffset - squareSideLength;
-    float topBoundary = topEdge - verticalOffset;
-    float bottomBoundary = bottomEdge - verticalOffset + squareSideLength;
+    // get the extra space we have outside of our grid
+    float horizontalExtraSpace = (screenWidth % squareSideLength);
+    float verticalExtraSpace = (screenHeight % squareSideLength);
 
-    for (float i = leftBoundary; i < rightBoundary; i += squareSideLength)
+    // get the amount of extra space to add between each square
+    float horizontalGap = horizontalExtraSpace / (gridWidth - 1);
+    float verticalGap = verticalExtraSpace / (gridHeight - 1);
+
+    for (float i = leftEdge; i < rightEdge; i += (squareSideLength + horizontalGap))
     {
-      for (float j = topBoundary; j > bottomBoundary; j -= squareSideLength)
+      for (float j = topEdge; j > bottomEdge; j -= (squareSideLength + verticalGap))
       {
-
         float x = i + Random.Range(circleRadius, squareSideLength - circleRadius);
         float y = j - Random.Range(circleRadius, squareSideLength - circleRadius);
 
