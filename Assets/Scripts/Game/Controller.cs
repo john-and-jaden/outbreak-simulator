@@ -47,16 +47,34 @@ public class Controller : MonoBehaviour
 
     // Debug.Log(topEdge); // 20 
     // Debug.Log(bottomEdge); // -20 
-    // Debug.Log(leftEdge); // 30
-    // Debug.Log(rightEdge); // -30 
+    // Debug.Log(leftEdge); // -30
+    // Debug.Log(rightEdge); // 30 
 
-    float squareSideLength = 10;
+    // our algorithm relies on these values, but the first one will be a user-input further along
+    float squareSideLength = 3;
     float circleRadius = 1;
 
-    for (float i = leftEdge; i < rightEdge - (circleRadius * 2); i += squareSideLength)
+    // get the width and height of the screen
+    float screenWidth = rightEdge - leftEdge;
+    float screenHeight = topEdge - bottomEdge;
+
+    // calculate the offset we will start the grid from on the left and the top.
+    // this is to make sure our grid, albeit random, is centered.
+    float horizontalOffset = (screenWidth % squareSideLength) / 2F;
+    float verticalOffset = (screenHeight % squareSideLength) / 2F;
+
+    // we could have put these values directly in the for loop, but they are here
+    // for readability only.
+    float leftBoundary = leftEdge + horizontalOffset;
+    float rightBoundary = rightEdge + horizontalOffset - squareSideLength;
+    float topBoundary = topEdge - verticalOffset;
+    float bottomBoundary = bottomEdge - verticalOffset + squareSideLength;
+
+    for (float i = leftBoundary; i < rightBoundary; i += squareSideLength)
     {
-      for (float j = topEdge; j > bottomEdge + (circleRadius * 2); j -= squareSideLength)
+      for (float j = topBoundary; j > bottomBoundary; j -= squareSideLength)
       {
+
         float x = i + Random.Range(circleRadius, squareSideLength - circleRadius);
         float y = j - Random.Range(circleRadius, squareSideLength - circleRadius);
 
