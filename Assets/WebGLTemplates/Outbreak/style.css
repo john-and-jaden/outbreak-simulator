@@ -1,0 +1,31 @@
+html, body {
+  height: 100%;
+  margin: 0;
+}
+
+#container {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+#header {
+  background-color: #274060;
+  flex: 0.1;
+  text-align: center;
+  font-size: 32px;
+  color: white;
+}
+
+#simulator {
+  background-color: #160F29;
+  flex: 0.85;
+}
+
+#footer {
+  background-color: #274060;
+  flex: 0.05;
+  text-align: center;
+  font-size: 24px;
+  color: white;
+}
