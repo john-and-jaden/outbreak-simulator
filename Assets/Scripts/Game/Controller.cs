@@ -45,17 +45,29 @@ public class Controller : MonoBehaviour
     float leftEdge = Camera.main.ViewportToWorldPoint(Vector3.zero).x;
     float rightEdge = Camera.main.ViewportToWorldPoint(Vector3.right).x;
 
-    // Debug.Log(topEdge); // 20 
-    // Debug.Log(bottomEdge); // -20 
-    // Debug.Log(leftEdge); // 30
-    // Debug.Log(rightEdge); // -30 
-
-    float squareSideLength = 10;
+    // our algorithm relies on these values, but the first one will eventually become a user-input one.
+    float squareSideLength = 2;
     float circleRadius = 1;
 
-    for (float i = leftEdge; i < rightEdge - (circleRadius * 2); i += squareSideLength)
+    // get the width and height of the screen
+    float screenWidth = rightEdge - leftEdge;
+    float screenHeight = topEdge - bottomEdge;
+
+    // get the number of squares we can fit on the screen
+    int gridWidth = (int)(screenWidth / squareSideLength);
+    int gridHeight = (int)(screenHeight / squareSideLength);
+
+    // get the extra space we have outside of our grid
+    float horizontalExtraSpace = (screenWidth % squareSideLength);
+    float verticalExtraSpace = (screenHeight % squareSideLength);
+
+    // get the amount of extra space to add between each square
+    float horizontalGap = horizontalExtraSpace / (gridWidth - 1);
+    float verticalGap = verticalExtraSpace / (gridHeight - 1);
+
+    for (float i = leftEdge; i < rightEdge; i += (squareSideLength + horizontalGap))
     {
-      for (float j = topEdge; j > bottomEdge + (circleRadius * 2); j -= squareSideLength)
+      for (float j = topEdge; j > bottomEdge; j -= (squareSideLength + verticalGap))
       {
         float x = i + Random.Range(circleRadius, squareSideLength - circleRadius);
         float y = j - Random.Range(circleRadius, squareSideLength - circleRadius);

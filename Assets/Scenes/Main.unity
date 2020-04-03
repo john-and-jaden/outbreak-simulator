@@ -239,7 +239,7 @@ MonoBehaviour:
     type: 3}
   initialNumberOfCases: 2
   showInfectionRadius: 1
-  timeScale: 2.05
+  timeScale: 0
 --- !u!4 &635752806
 Transform:
   m_ObjectHideFlags: 0
