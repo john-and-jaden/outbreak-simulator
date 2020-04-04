@@ -29,9 +29,6 @@ public class Controller : MonoBehaviour
   [Tooltip("Whether or not to display infected people's infection radiuses.")]
   public bool showInfectionRadius;
 
-  [Tooltip("The scale at which time passes.")]
-  public float timeScale;
-
   // ***************************** //
   // ***** Private variables ***** //
   // ***************************** //
@@ -53,8 +50,7 @@ public class Controller : MonoBehaviour
 
   void Update()
   {
-    // update the time scale
-    Time.timeScale = timeScale;
+
   }
 
   // **************************** //
@@ -70,7 +66,7 @@ public class Controller : MonoBehaviour
 
   public void UpdateTimescale(float timeScale)
   {
-    this.timeScale = timeScale;
+    Time.timeScale = timeScale;
   }
 
   public void ShowInfectionRadius(bool showInfectionRadius)
