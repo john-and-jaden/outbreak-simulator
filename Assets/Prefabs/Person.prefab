@@ -136,9 +136,9 @@ MonoBehaviour:
   movementSpeed: 3
   maxAngleDeltaPerSecond: 150
   maxInfectionRadius: 2
-  timeToReachFullContagion: 2
+  infectionRadiusGrowthDuration: 2
   recoveryDuration: 10
   infectedColor: {r: 0.95686275, g: 0, b: 0, a: 1}
   recoveredColor: {r: 0.23137255, g: 0.75686276, b: 0.2901961, a: 1}
-  infectionRadiusRendererPrefab: {fileID: -4131193668513542828, guid: ab5c270efc7be48f386e6f650647c0fe,
+  infectionRadiusPrefab: {fileID: 7041309840129198322, guid: ab5c270efc7be48f386e6f650647c0fe,
     type: 3}

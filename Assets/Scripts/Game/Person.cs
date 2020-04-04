@@ -18,7 +18,7 @@ public class Person : MonoBehaviour
   public float maxInfectionRadius;
 
   [Tooltip("The time since becoming infected for the infection radius to reach max value.")]
-  public float timeToReachFullContagion;
+  public float infectionRadiusGrowthDuration;
 
   [Tooltip("The amount of time a person will take to recover since becoming infected.")]
   public float recoveryDuration;
@@ -30,7 +30,8 @@ public class Person : MonoBehaviour
   public Color recoveredColor;
 
   [Tooltip("Prefab of the InfectionRadiusRenderer object to spawn.")]
-  public InfectionRadiusRenderer infectionRadiusRendererPrefab;
+  public SpriteRenderer infectionRadiusPrefab;
+
   // ***************************** //
   // ***** Private variables ***** //
   // ***************************** //
@@ -38,10 +39,12 @@ public class Person : MonoBehaviour
   private InfectionStatus infectionStatus;
   private Vector3 direction;
   private float infectionRadius;
+  private float infectionRadiusGrowthTimer;
   private float perlinCoordinate;
   private float recoveryTimer;
   private Collider2D[] nearbyPeople;
-  private InfectionRadiusRenderer infectionRadiusRenderer;
+  private SpriteRenderer infectionRadiusRenderer;
+
   // **************************** //
   // ***** Helper variables ***** //
   // **************************** //
@@ -64,10 +67,10 @@ public class Person : MonoBehaviour
     direction = new Vector2(Random.Range(-1f, 1f), Random.Range(-1f, 1f)).normalized;
     infectionRadius = cc2D.radius;
     perlinCoordinate = Random.Range(0, 1000);
-    // For efficiency, people can infect up to 5 other nearby people at a time
+    // For efficiency, a person can infect up to 5 other nearby people at a time
     nearbyPeople = new Collider2D[5];
 
-    infectionRadiusRenderer = Instantiate(infectionRadiusRendererPrefab, Vector3.zero, Quaternion.identity);
+    infectionRadiusRenderer = Instantiate(infectionRadiusPrefab, transform.position, Quaternion.identity, transform);
   }
 
   void Update()
@@ -87,7 +90,7 @@ public class Person : MonoBehaviour
   {
     Vector3 dirToOther = collision.transform.position - transform.position;
 
-    // If we are just ran into the other person
+    // If we just ran into the other person
     if (Vector3.Dot(direction, dirToOther) > 0)
     {
       Vector3 normal = collision.GetContact(0).normal;
@@ -103,17 +106,14 @@ public class Person : MonoBehaviour
   {
     infectionStatus = newStatus;
     UpdateColor();
+    UpdateInfectionRadiusVisibility();
   }
 
-  public void SetShowInfectionRadius(bool showInfectionRadius)
+  public void UpdateInfectionRadiusVisibility()
   {
-    if (infectionStatus != InfectionStatus.INFECTED)
-    {
-      showInfectionRadius = false;
-    }
-
-    infectionRadiusRenderer.SetShowInfectionRadius(showInfectionRadius);
+    infectionRadiusRenderer.enabled = Controller.instance.showInfectionRadius && infectionStatus == InfectionStatus.INFECTED;
   }
+
   // ***************************** //
   // ***** Private functions ***** //
   // ***************************** //
@@ -131,16 +131,17 @@ public class Person : MonoBehaviour
     // Move the person in the given direction
     transform.position += direction * movementSpeed * Time.deltaTime;
 
-    infectionRadiusRenderer.transform.position = transform.position;
+    //infectionRadiusRenderer.transform.position = transform.position;
   }
 
   private void UpdateInfectionRadius()
   {
     if (infectionRadius < maxInfectionRadius)
     {
-      infectionRadius += Time.deltaTime / timeToReachFullContagion;
-      infectionRadius = Mathf.Clamp(infectionRadius, 0, maxInfectionRadius);
-      infectionRadiusRenderer.setRadius(infectionRadius);
+      infectionRadiusGrowthTimer += Time.deltaTime;
+      float growthProgress = infectionRadiusGrowthTimer / infectionRadiusGrowthDuration;
+      infectionRadius = Mathf.Lerp(cc2D.radius, maxInfectionRadius, growthProgress);
+      infectionRadiusRenderer.size = Vector2.one * infectionRadius * 2;
     }
   }
 

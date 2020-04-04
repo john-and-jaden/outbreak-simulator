@@ -5,6 +5,12 @@ using UnityEngine;
 public class Controller : MonoBehaviour
 {
   // **************************** //
+  // ***** Static variables ***** //
+  // **************************** //
+
+  public static Controller instance;
+
+  // **************************** //
   // ***** Public variables ***** //
   // **************************** //
 
@@ -25,6 +31,7 @@ public class Controller : MonoBehaviour
 
   [Tooltip("The scale at which time passes.")]
   public float timeScale;
+
   // ***************************** //
   // ***** Private variables ***** //
   // ***************************** //
@@ -37,8 +44,56 @@ public class Controller : MonoBehaviour
 
   void Start()
   {
-    people = new List<Person>();
+    if (instance != null)
+    {
+      Destroy(instance.gameObject);
+    }
+    instance = this;
+  }
 
+  void Update()
+  {
+    // update whether or not to show people's infection radius
+    // foreach (Person person in people)
+    // {
+    //   person.SetShowInfectionRadius(showInfectionRadius);
+    // }
+
+    // update the time scale
+    Time.timeScale = timeScale;
+  }
+
+  // **************************** //
+  // ***** Public functions ***** //
+  // **************************** //
+
+  public void StartSimulation()
+  {
+    ClearPeople();
+    SpawnPeople();
+    InfectInitialPatients();
+  }
+
+  public void UpdateTimescale(float timeScale)
+  {
+    this.timeScale = timeScale;
+  }
+
+  public void ShowInfectionRadius(bool showInfectionRadius)
+  {
+    this.showInfectionRadius = showInfectionRadius;
+    foreach (Person person in people)
+    {
+      person.UpdateInfectionRadiusVisibility();
+    }
+  }
+
+  // ***************************** //
+  // ***** Private functions ***** //
+  // ***************************** //
+
+  private void SpawnPeople()
+  {
     // Get the edges of the camera viewport in world coordinates
     float topEdge = Camera.main.ViewportToWorldPoint(Vector3.up).y;
     float bottomEdge = Camera.main.ViewportToWorldPoint(Vector3.zero).y;
@@ -76,25 +131,20 @@ public class Controller : MonoBehaviour
         people.Add(person);
       }
     }
-
-    InfectInitialPatients();
   }
 
-  void Update()
+  private void ClearPeople()
   {
-    // update whether or not to show people's infection radius
-    foreach (Person person in people)
+    if (people != null)
     {
-      person.SetShowInfectionRadius(showInfectionRadius);
+      foreach (Person person in people)
+      {
+        Destroy(person.gameObject);
+      }
     }
 
-    // update the time scale
-    Time.timeScale = timeScale;
+    people = new List<Person>();
   }
-
-  // ***************************** //
-  // ***** Private functions ***** //
-  // ***************************** //
 
   private void InfectInitialPatients()
   {
