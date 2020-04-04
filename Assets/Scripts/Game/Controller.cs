@@ -53,12 +53,6 @@ public class Controller : MonoBehaviour
 
   void Update()
   {
-    // update whether or not to show people's infection radius
-    // foreach (Person person in people)
-    // {
-    //   person.SetShowInfectionRadius(showInfectionRadius);
-    // }
-
     // update the time scale
     Time.timeScale = timeScale;
   }
@@ -87,7 +81,6 @@ public class Controller : MonoBehaviour
       person.UpdateInfectionRadiusVisibility();
     }
   }
-
   // ***************************** //
   // ***** Private functions ***** //
   // ***************************** //
