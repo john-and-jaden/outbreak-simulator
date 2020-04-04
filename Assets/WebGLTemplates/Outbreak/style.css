@@ -1,31 +1,38 @@
+@font-face {
+  font-family: outbreak;
+  src: url('Quikhand.ttf');
+}
+
 html, body {
   height: 100%;
   margin: 0;
 }
 
-#container {
-  height: 100%;
+#header {
+  background-color: #160f29;
+  height: 10%;
   display: flex;
   flex-direction: column;
-}
-
-#header {
-  background-color: #274060;
-  flex: 0.1;
+  justify-content: center;
   text-align: center;
-  font-size: 32px;
-  color: white;
+  font-family: outbreak;
+  font-size: 48px;
+  color: #3BC14A;
 }
 
 #simulator {
-  background-color: #160F29;
-  flex: 0.85;
+  background-color: #160f29;
+  height: 85%;
 }
 
 #footer {
-  background-color: #274060;
-  flex: 0.05;
+  background-color: #160f29;
+  height: 5%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
   text-align: center;
+  font-family: outbreak;
   font-size: 24px;
-  color: white;
+  color: #3BC14A;
 }

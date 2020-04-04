@@ -107,6 +107,11 @@ public class Person : MonoBehaviour
 
   public void SetShowInfectionRadius(bool showInfectionRadius)
   {
+    if (infectionStatus != InfectionStatus.INFECTED)
+    {
+      showInfectionRadius = false;
+    }
+
     infectionRadiusRenderer.SetShowInfectionRadius(showInfectionRadius);
   }
   // ***************************** //

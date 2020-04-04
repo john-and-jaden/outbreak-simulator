@@ -157,7 +157,7 @@ Camera:
   m_Enabled: 1
   serializedVersion: 2
   m_ClearFlags: 1
-  m_BackGroundColor: {r: 0.19215687, g: 0.3019608, b: 0.4745098, a: 0}
+  m_BackGroundColor: {r: 0.08627451, g: 0.05882353, b: 0.16078432, a: 0}
   m_projectionMatrixMode: 1
   m_GateFitMode: 2
   m_FOVAxisMode: 0
@@ -237,9 +237,9 @@ MonoBehaviour:
   spawnGapDistance: 4
   personPrefab: {fileID: 1017537500377173445, guid: fa098ac545abb4c3fab403b85626804c,
     type: 3}
-  initialNumberOfCases: 2
+  initialNumberOfCases: 3
   showInfectionRadius: 1
-  timeScale: 0
+  timeScale: 1
 --- !u!4 &635752806
 Transform:
   m_ObjectHideFlags: 0

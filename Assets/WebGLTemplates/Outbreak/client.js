@@ -26,18 +26,5 @@ function UnityProgress(unityInstance, progress) {
 
   if (progress == 1) {
     unityInstance.logo.style.display = unityInstance.progress.style.display = 'none';
-    // OnCanvasLoaded();
   }
 }
-
-// function OnCanvasLoaded() {
-//   window.addEventListener('resize', function() {
-//     var canvas = document.getElementsByTagName('canvas')[0];
-//     console.log(canvas);
-//     var rect = canvas.parentNode.getBoundingClientRect();
-//     console.log(rect);
-//     canvas.width = rect.width;
-//     canvas.height = rect.height;
-//     console.log(canvas);
-//   });
-// }
