@@ -14,9 +14,6 @@ public class Controller : MonoBehaviour
   // ***** Public variables ***** //
   // **************************** //
 
-  [Tooltip("Number of people to be spawned.")]
-  public int numPeople;
-
   [Tooltip("Distance between each person when spawned in a grid.")]
   public float spawnGapDistance;
 
@@ -35,6 +32,8 @@ public class Controller : MonoBehaviour
 
   private List<Person> people;
 
+  int numPeople;
+
   // *************************** //
   // ***** Unity functions ***** //
   // *************************** //
@@ -46,6 +45,7 @@ public class Controller : MonoBehaviour
       Destroy(instance.gameObject);
     }
     instance = this;
+    instance.numPeople = 1;
   }
 
   void Update()
@@ -77,12 +77,19 @@ public class Controller : MonoBehaviour
       person.UpdateInfectionRadiusVisibility();
     }
   }
+  public void SetNumPeople(float numPeople)
+  {
+    this.numPeople = (int)numPeople;
+  }
   // ***************************** //
   // ***** Private functions ***** //
   // ***************************** //
 
   private void SpawnPeople()
   {
+    Debug.Log(numPeople);
+
+
     // Get the edges of the camera viewport in world coordinates
     float topEdge = Camera.main.ViewportToWorldPoint(Vector3.up).y;
     float bottomEdge = Camera.main.ViewportToWorldPoint(Vector3.zero).y;
