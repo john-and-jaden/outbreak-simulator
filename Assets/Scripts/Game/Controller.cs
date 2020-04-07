@@ -64,12 +64,12 @@ public class Controller : MonoBehaviour
     InfectInitialPatients();
   }
 
-  public void UpdateTimescale(float timeScale)
+  public void SetTimescale(float timeScale)
   {
     Time.timeScale = timeScale;
   }
 
-  public void ShowInfectionRadius(bool showInfectionRadius)
+  public void SetShowInfectionRadius(bool showInfectionRadius)
   {
     this.showInfectionRadius = showInfectionRadius;
     foreach (Person person in people)
