@@ -1638,7 +1638,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 635752805}
-        m_MethodName: ShowInfectionRadius
+        m_MethodName: SetShowInfectionRadius
         m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

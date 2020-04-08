@@ -46,11 +46,8 @@ public class Controller : MonoBehaviour
     }
     instance = this;
     instance.numPeople = 1;
-  }
-
-  void Update()
-  {
-
+    
+    ClearPeople();
   }
 
   // **************************** //
@@ -77,10 +74,12 @@ public class Controller : MonoBehaviour
       person.UpdateInfectionRadiusVisibility();
     }
   }
+
   public void SetNumPeople(float numPeople)
   {
     this.numPeople = (int)numPeople;
   }
+
   // ***************************** //
   // ***** Private functions ***** //
   // ***************************** //
