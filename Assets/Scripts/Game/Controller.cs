@@ -46,7 +46,7 @@ public class Controller : MonoBehaviour
     }
     instance = this;
     instance.numPeople = 1;
-    
+
     ClearPeople();
   }
 
@@ -86,44 +86,35 @@ public class Controller : MonoBehaviour
 
   private void SpawnPeople()
   {
-    Debug.Log(numPeople);
-
-
     // Get the edges of the camera viewport in world coordinates
     float topEdge = Camera.main.ViewportToWorldPoint(Vector3.up).y;
     float bottomEdge = Camera.main.ViewportToWorldPoint(Vector3.zero).y;
     float leftEdge = Camera.main.ViewportToWorldPoint(Vector3.zero).x;
     float rightEdge = Camera.main.ViewportToWorldPoint(Vector3.right).x;
 
-    // our algorithm relies on these values, but the first one will eventually become a user-input one.
-    float squareSideLength = 2;
+    // define the radius of a person
     float circleRadius = 1;
 
-    // get the width and height of the screen
-    float screenWidth = rightEdge - leftEdge;
-    float screenHeight = topEdge - bottomEdge;
-
-    // get the number of squares we can fit on the screen
-    int gridWidth = (int)(screenWidth / squareSideLength);
-    int gridHeight = (int)(screenHeight / squareSideLength);
-
-    // get the extra space we have outside of our grid
-    float horizontalExtraSpace = (screenWidth % squareSideLength);
-    float verticalExtraSpace = (screenHeight % squareSideLength);
-
-    // get the amount of extra space to add between each square
-    float horizontalGap = horizontalExtraSpace / (gridWidth - 1);
-    float verticalGap = verticalExtraSpace / (gridHeight - 1);
-
-    for (float i = leftEdge; i < rightEdge; i += (squareSideLength + horizontalGap))
+    // spray and pray
+    while (people.Count < numPeople)
     {
-      for (float j = topEdge; j > bottomEdge; j -= (squareSideLength + verticalGap))
-      {
-        float x = i + Random.Range(circleRadius, squareSideLength - circleRadius);
-        float y = j - Random.Range(circleRadius, squareSideLength - circleRadius);
+      float x = Random.Range(leftEdge, rightEdge);
+      float y = Random.Range(topEdge, bottomEdge);
 
-        Person person = Instantiate(personPrefab, new Vector3(x, y), Quaternion.identity);
-        people.Add(person);
+      bool positionValid = true;
+
+      for (int i = 0; i < people.Count; i++)
+      {
+        if (Vector2.Distance(people[i].transform.position, new Vector2(x, y)) < 2 * circleRadius)
+        {
+          positionValid = false;
+          break;
+        }
+      }
+
+      if (positionValid)
+      {
+        people.Add(Instantiate(personPrefab, new Vector3(x, y), Quaternion.identity));
       }
     }
   }
