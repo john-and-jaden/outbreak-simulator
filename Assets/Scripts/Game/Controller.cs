@@ -64,8 +64,8 @@ public class Controller : MonoBehaviour
     InitializePopulationBreakdown();
     ClearPeople();
     SpawnPeople();
+    StartGraph();
     InfectInitialPatients();
-    graph.SetWorldPopulation(numPeople);
   }
 
   public void SetTimescale(float timeScale)
@@ -87,12 +87,14 @@ public class Controller : MonoBehaviour
     this.numPeople = (int)numPeople;
   }
 
-  public void UpdatePopulationbreakdown(InfectionStatus previousStatus, InfectionStatus newStatus)
+  public void UpdatePopulationBreakdown(InfectionStatus previousStatus, InfectionStatus newStatus)
   {
     populationHealthBreakdown[(int)previousStatus] = populationHealthBreakdown[(int)previousStatus] + -1;
     populationHealthBreakdown[(int)newStatus] = populationHealthBreakdown[(int)newStatus] + 1;
 
+    graph.SetNumHealthyPeople(populationHealthBreakdown[(int)InfectionStatus.HEALTHY]);
     graph.SetNumInfectedPeople(populationHealthBreakdown[(int)InfectionStatus.INFECTED]);
+    graph.SetNumRecoveredPeople(populationHealthBreakdown[(int)InfectionStatus.RECOVERED]);
   }
 
   // ***************************** //
@@ -158,8 +160,16 @@ public class Controller : MonoBehaviour
   private void InitializePopulationBreakdown()
   {
     populationHealthBreakdown = new Dictionary<int, int>();
-    populationHealthBreakdown.Add((int)InfectionStatus.HEALTHY, 0);
-    populationHealthBreakdown.Add((int)InfectionStatus.INFECTED, 0);
+    populationHealthBreakdown.Add((int)InfectionStatus.HEALTHY, numPeople - initialNumberOfCases);
+    populationHealthBreakdown.Add((int)InfectionStatus.INFECTED, initialNumberOfCases);
     populationHealthBreakdown.Add((int)InfectionStatus.RECOVERED, 0);
+  }
+
+  private void StartGraph()
+  {
+    graph.SetNumPeople(numPeople);
+    graph.SetNumHealthyPeople(numPeople - initialNumberOfCases);
+    graph.SetNumInfectedPeople(initialNumberOfCases);
+    graph.SetNumRecoveredPeople(0);
   }
 }

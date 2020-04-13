@@ -4,20 +4,30 @@ using UnityEngine;
 
 public class Graph : MonoBehaviour
 {
+  public Bar healthyPeopleBar;
   public Bar infectedPeopleBar;
+  public Bar recoveredPeopleBar;
 
-  void start()
+  private int numPeople;
+
+  public void SetNumPeople(int pop)
   {
-    SetNumInfectedPeople(0);
+    numPeople = pop;
+    healthyPeopleBar.SetMaxValue(pop);
+    infectedPeopleBar.SetMaxValue(pop);
+    recoveredPeopleBar.SetMaxValue(pop);
   }
 
+  public void SetNumHealthyPeople(int value)
+  {
+    healthyPeopleBar.SetHeight(value);
+  }
   public void SetNumInfectedPeople(int value)
   {
     infectedPeopleBar.SetHeight(value);
   }
-
-  public void SetWorldPopulation(int pop)
+  public void SetNumRecoveredPeople(int value)
   {
-    infectedPeopleBar.SetMaxValue(pop);
+    recoveredPeopleBar.SetHeight(value);
   }
 }

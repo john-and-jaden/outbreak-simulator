@@ -109,7 +109,7 @@ public class Person : MonoBehaviour
     UpdateColor();
     UpdateInfectionRadiusVisibility();
 
-    Controller.instance.UpdatePopulationbreakdown(previousStatus, newStatus);
+    Controller.instance.UpdatePopulationBreakdown(previousStatus, newStatus);
   }
 
   public void UpdateInfectionRadiusVisibility()
@@ -215,7 +215,7 @@ public class Person : MonoBehaviour
     recoveryTimer += Time.deltaTime;
     if (recoveryTimer >= recoveryDuration)
     {
-      // SetInfectionStatus(InfectionStatus.RECOVERED);
+      SetInfectionStatus(InfectionStatus.RECOVERED);
     }
   }
 
