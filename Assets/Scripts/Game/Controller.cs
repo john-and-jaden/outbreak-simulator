@@ -26,6 +26,9 @@ public class Controller : MonoBehaviour
   [Tooltip("Whether or not to display infected people's infection radiuses.")]
   public bool showInfectionRadius;
 
+  [Tooltip("The statistics graph")]
+  public Graph graph;
+
   // ***************************** //
   // ***** Private variables ***** //
   // ***************************** //
@@ -33,6 +36,8 @@ public class Controller : MonoBehaviour
   private List<Person> people;
 
   int numPeople;
+
+  Dictionary<int, int> populationHealthBreakdown;
 
   // *************************** //
   // ***** Unity functions ***** //
@@ -56,9 +61,11 @@ public class Controller : MonoBehaviour
 
   public void StartSimulation()
   {
+    InitializePopulationBreakdown();
     ClearPeople();
     SpawnPeople();
     InfectInitialPatients();
+    graph.SetWorldPopulation(numPeople);
   }
 
   public void SetTimescale(float timeScale)
@@ -78,6 +85,14 @@ public class Controller : MonoBehaviour
   public void SetNumPeople(float numPeople)
   {
     this.numPeople = (int)numPeople;
+  }
+
+  public void UpdatePopulationbreakdown(InfectionStatus previousStatus, InfectionStatus newStatus)
+  {
+    populationHealthBreakdown[(int)previousStatus] = populationHealthBreakdown[(int)previousStatus] + -1;
+    populationHealthBreakdown[(int)newStatus] = populationHealthBreakdown[(int)newStatus] + 1;
+
+    graph.SetNumInfectedPeople(populationHealthBreakdown[(int)InfectionStatus.INFECTED]);
   }
 
   // ***************************** //
@@ -138,5 +153,13 @@ public class Controller : MonoBehaviour
     {
       people[i].SetInfectionStatus(InfectionStatus.INFECTED);
     }
+  }
+
+  private void InitializePopulationBreakdown()
+  {
+    populationHealthBreakdown = new Dictionary<int, int>();
+    populationHealthBreakdown.Add((int)InfectionStatus.HEALTHY, 0);
+    populationHealthBreakdown.Add((int)InfectionStatus.INFECTED, 0);
+    populationHealthBreakdown.Add((int)InfectionStatus.RECOVERED, 0);
   }
 }
