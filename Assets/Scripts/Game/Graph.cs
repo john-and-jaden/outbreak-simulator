@@ -20,7 +20,7 @@ public class Graph : MonoBehaviour
 
   public void SetNumHealthyPeople(int value)
   {
-    healthyPeopleBar.SetHeight(value);
+    // healthyPeopleBar.SetHeight(value);
   }
   public void SetNumInfectedPeople(int value)
   {
