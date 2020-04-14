@@ -157,7 +157,7 @@ Camera:
   m_Enabled: 1
   serializedVersion: 2
   m_ClearFlags: 1
-  m_BackGroundColor: {r: 0.24236828, g: 0.1961107, b: 0.3679245, a: 0}
+  m_BackGroundColor: {r: 0.6156863, g: 0.15686275, b: 0.16862746, a: 0}
   m_projectionMatrixMode: 1
   m_GateFitMode: 2
   m_FOVAxisMode: 0
@@ -695,7 +695,7 @@ GameObject:
   - component: {fileID: 401627052}
   - component: {fileID: 401627051}
   m_Layer: 5
-  m_Name: RaycastTarget
+  m_Name: HoverArea
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

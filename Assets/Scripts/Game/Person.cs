@@ -124,24 +124,22 @@ public class Person : MonoBehaviour
   private void Move()
   {
     // The value used to move through perlin coordinates - bigger is more chaotic
-    perlinCoordinate += Time.deltaTime;
+    perlinCoordinate += Time.deltaTime * Controller.timeScale;
     // Value between -1 and 1
     float perlinScale = (Mathf.PerlinNoise(perlinCoordinate, 0f) * 2) - 1;
     // The amount by which we should rotate the direction this frame
-    float angleDelta = maxAngleDeltaPerSecond * perlinScale * Time.deltaTime;
+    float angleDelta = maxAngleDeltaPerSecond * perlinScale * Time.deltaTime * Controller.timeScale;
     // Rotate the direction
     direction = Quaternion.AngleAxis(angleDelta, Vector3.forward) * direction;
     // Move the person in the given direction
-    transform.position += direction * movementSpeed * Time.deltaTime;
-
-    //infectionRadiusRenderer.transform.position = transform.position;
+    transform.position += direction * movementSpeed * Time.deltaTime * Controller.timeScale;
   }
 
   private void UpdateInfectionRadius()
   {
     if (infectionRadius < maxInfectionRadius)
     {
-      infectionRadiusGrowthTimer += Time.deltaTime;
+      infectionRadiusGrowthTimer += Time.deltaTime * Controller.timeScale;
       float growthProgress = infectionRadiusGrowthTimer / infectionRadiusGrowthDuration;
       infectionRadius = Mathf.Lerp(cc2D.radius, maxInfectionRadius, growthProgress);
       infectionRadiusRenderer.size = Vector2.one * infectionRadius * 2;
@@ -212,7 +210,7 @@ public class Person : MonoBehaviour
 
   private void UpdateRecovery()
   {
-    recoveryTimer += Time.deltaTime;
+    recoveryTimer += Time.deltaTime * Controller.timeScale;
     if (recoveryTimer >= recoveryDuration)
     {
       SetInfectionStatus(InfectionStatus.RECOVERED);

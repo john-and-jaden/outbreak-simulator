@@ -9,6 +9,7 @@ public class Controller : MonoBehaviour
   // **************************** //
 
   public static Controller instance;
+  public static float timeScale = 1f;
 
   // **************************** //
   // ***** Public variables ***** //
@@ -70,7 +71,7 @@ public class Controller : MonoBehaviour
 
   public void SetTimescale(float timeScale)
   {
-    Time.timeScale = timeScale;
+    Controller.timeScale = timeScale;
   }
 
   public void SetShowInfectionRadius(bool showInfectionRadius)
