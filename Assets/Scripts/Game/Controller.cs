@@ -92,7 +92,7 @@ public class Controller : MonoBehaviour
     populationHealthBreakdown[(int)previousStatus] = populationHealthBreakdown[(int)previousStatus] + -1;
     populationHealthBreakdown[(int)newStatus] = populationHealthBreakdown[(int)newStatus] + 1;
 
-    graph.SetNumHealthyPeople(populationHealthBreakdown[(int)InfectionStatus.HEALTHY]);
+    // graph.SetNumHealthyPeople(populationHealthBreakdown[(int)InfectionStatus.HEALTHY]);
     graph.SetNumInfectedPeople(populationHealthBreakdown[(int)InfectionStatus.INFECTED]);
     graph.SetNumRecoveredPeople(populationHealthBreakdown[(int)InfectionStatus.RECOVERED]);
   }
