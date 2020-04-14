@@ -151,7 +151,8 @@ public class Controller : MonoBehaviour
 
   private void InfectInitialPatients()
   {
-    for (int i = 0; i < initialNumberOfCases; i++)
+    int numCases = Mathf.Min(initialNumberOfCases, people.Count);
+    for (int i = 0; i < numCases; i++)
     {
       people[i].SetInfectionStatus(InfectionStatus.INFECTED);
     }
