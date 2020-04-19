@@ -5,33 +5,31 @@ using UnityEngine.EventSystems;
 
 public class OptionsPanel : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
-    public Animator buttonAnimator;
-    public Animator panelAnimator;
+  public Animator buttonAnimator;
+  public Animator panelAnimator;
 
-    private bool isOpen = false;
+  private bool isOpen = false;
 
-    public void OnPointerEnter(PointerEventData eventData)
+  public void OnPointerEnter(PointerEventData eventData)
+  {
+    if (!isOpen)
     {
-        Debug.Log("enter");
-        if (!isOpen)
-        {
-            buttonAnimator.SetBool("IsExtended", true);
-        }
+      buttonAnimator.SetBool("IsExtended", true);
     }
+  }
 
-    public void OnPointerExit(PointerEventData eventData)
+  public void OnPointerExit(PointerEventData eventData)
+  {
+    if (!isOpen)
     {
-        Debug.Log("exit");
-        if (!isOpen)
-        {
-            buttonAnimator.SetBool("IsExtended", false);
-        }
+      buttonAnimator.SetBool("IsExtended", false);
     }
+  }
 
-    public void TogglePanel()
-    {
-        isOpen = !isOpen;
-        panelAnimator.SetBool("IsOpen", isOpen);
-        buttonAnimator.SetBool("IsOpen", isOpen);
-    }
+  public void TogglePanel()
+  {
+    isOpen = !isOpen;
+    panelAnimator.SetBool("IsOpen", isOpen);
+    buttonAnimator.SetBool("IsOpen", isOpen);
+  }
 }
