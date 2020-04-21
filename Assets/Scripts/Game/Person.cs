@@ -14,15 +14,6 @@ public class Person : MonoBehaviour
   [Tooltip("Max rotation of a person's direction in degrees per second.")]
   public float maxAngleDeltaPerSecond;
 
-  [Tooltip("The radius around a person in which other people can become infected.")]
-  public float maxInfectionRadius;
-
-  [Tooltip("The time since becoming infected for the infection radius to reach max value.")]
-  public float infectionRadiusGrowthDuration;
-
-  [Tooltip("The amount of time a person will take to recover since becoming infected.")]
-  public float recoveryDuration;
-
   [Tooltip("The color of infected people.")]
   public Color infectedColor;
 
@@ -70,6 +61,7 @@ public class Person : MonoBehaviour
     // For efficiency, a person can infect up to 5 other nearby people at a time
     nearbyPeople = new Collider2D[5];
 
+    // Create the renderer object for the infection radius visualization
     infectionRadiusRenderer = Instantiate(infectionRadiusPrefab, transform.position, Quaternion.identity, transform);
   }
 
@@ -90,7 +82,7 @@ public class Person : MonoBehaviour
   {
     Vector3 dirToOther = collision.transform.position - transform.position;
 
-    // If we just ran into the other person
+    // If we just ran into the other person (moving towards them)
     if (Vector3.Dot(direction, dirToOther) > 0)
     {
       Vector3 normal = collision.GetContact(0).normal;
@@ -114,7 +106,7 @@ public class Person : MonoBehaviour
 
   public void UpdateInfectionRadiusVisibility()
   {
-    infectionRadiusRenderer.enabled = Controller.instance.showInfectionRadius && infectionStatus == InfectionStatus.INFECTED;
+    infectionRadiusRenderer.enabled = Controller.showInfectionRadius && infectionStatus == InfectionStatus.INFECTED;
   }
 
   // ***************************** //
@@ -123,25 +115,26 @@ public class Person : MonoBehaviour
 
   private void Move()
   {
+    float timeStep = Time.deltaTime * Controller.timeScale;
     // The value used to move through perlin coordinates - bigger is more chaotic
-    perlinCoordinate += Time.deltaTime * Controller.timeScale;
+    perlinCoordinate += timeStep;
     // Value between -1 and 1
     float perlinScale = (Mathf.PerlinNoise(perlinCoordinate, 0f) * 2) - 1;
     // The amount by which we should rotate the direction this frame
-    float angleDelta = maxAngleDeltaPerSecond * perlinScale * Time.deltaTime * Controller.timeScale;
+    float angleDelta = maxAngleDeltaPerSecond * perlinScale * timeStep;
     // Rotate the direction
     direction = Quaternion.AngleAxis(angleDelta, Vector3.forward) * direction;
     // Move the person in the given direction
-    transform.position += direction * movementSpeed * Time.deltaTime * Controller.timeScale;
+    transform.position += direction * movementSpeed * timeStep;
   }
 
   private void UpdateInfectionRadius()
   {
-    if (infectionRadius < maxInfectionRadius)
+    if (infectionRadius < Controller.maxInfectionRadius)
     {
       infectionRadiusGrowthTimer += Time.deltaTime * Controller.timeScale;
-      float growthProgress = infectionRadiusGrowthTimer / infectionRadiusGrowthDuration;
-      infectionRadius = Mathf.Lerp(cc2D.radius, maxInfectionRadius, growthProgress);
+      float growthProgress = infectionRadiusGrowthTimer / Controller.infectionRadiusGrowthTime;
+      infectionRadius = Mathf.Lerp(cc2D.radius, Controller.maxInfectionRadius, growthProgress);
       infectionRadiusRenderer.size = Vector2.one * infectionRadius * 2;
     }
   }
@@ -211,7 +204,7 @@ public class Person : MonoBehaviour
   private void UpdateRecovery()
   {
     recoveryTimer += Time.deltaTime * Controller.timeScale;
-    if (recoveryTimer >= recoveryDuration)
+    if (recoveryTimer >= Controller.recoveryTime)
     {
       SetInfectionStatus(InfectionStatus.RECOVERED);
     }

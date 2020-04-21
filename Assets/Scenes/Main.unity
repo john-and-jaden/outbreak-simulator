@@ -1367,11 +1367,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d6e70cd4bc78e9e4ea8bef1307611556, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  spawnGapDistance: 4
+  defaultTimeScale: 1
+  defaultNumPeople: 1000
+  defaultPercentInfected: 0.1
+  defaultShowInfectionRadius: 1
+  defaultMaxInfectionRadius: 0
+  defaultInfectionRadiusGrowthTime: 0
+  defaultRecoveryTime: 0
   personPrefab: {fileID: 1017537500377173445, guid: fa098ac545abb4c3fab403b85626804c,
     type: 3}
-  initialNumberOfCases: 3
-  showInfectionRadius: 1
   graph: {fileID: 1419604352}
 --- !u!4 &635752806
 Transform:

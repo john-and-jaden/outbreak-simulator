@@ -10,24 +10,44 @@ public class Controller : MonoBehaviour
 
   public static Controller instance;
   public static float timeScale = 1f;
+  public static bool showInfectionRadius = false;
+  public static float maxInfectionRadius = 2f;
+  public static float infectionRadiusGrowthTime = 1f;
+  public static float recoveryTime = 5f;
 
   // **************************** //
   // ***** Public variables ***** //
   // **************************** //
 
-  [Tooltip("Distance between each person when spawned in a grid.")]
-  public float spawnGapDistance;
+  [Header("Defaults")]
+
+  [Tooltip("Default setting for the timescale of the simulation.")]
+  public int defaultTimeScale;
+
+  [Tooltip("Default setting for the total number of people.")]
+  public float defaultNumPeople;
+
+  [Tooltip("Default setting for the initial number of infected people.")]
+  public float defaultPercentInfected;
+
+  [Tooltip("Default setting for the visibility of people's infection radii.")]
+  public bool defaultShowInfectionRadius;
+
+  [Tooltip("Default setting for the max infection radius.")]
+  public float defaultMaxInfectionRadius;
+
+  [Tooltip("Default setting for the time it takes for a person to become fully contagious.")]
+  public float defaultInfectionRadiusGrowthTime;
+
+  [Tooltip("Default setting for the time it takes for an infected person to recover.")]
+  public float defaultRecoveryTime;
+
+  [Space]
 
   [Tooltip("Prefab of the person object to spawn.")]
   public Person personPrefab;
 
-  [Tooltip("Initial number of infected people.")]
-  public int initialNumberOfCases;
-
-  [Tooltip("Whether or not to display infected people's infection radiuses.")]
-  public bool showInfectionRadius;
-
-  [Tooltip("The statistics graph")]
+  [Tooltip("The statistics graph UI object.")]
   public Graph graph;
 
   // ***************************** //
@@ -36,9 +56,9 @@ public class Controller : MonoBehaviour
 
   private List<Person> people;
 
-  int numPeople;
+  private int numPeople;
 
-  Dictionary<int, int> populationHealthBreakdown;
+  private Dictionary<int, int> populationHealthBreakdown;
 
   // *************************** //
   // ***** Unity functions ***** //
@@ -76,7 +96,7 @@ public class Controller : MonoBehaviour
 
   public void SetShowInfectionRadius(bool showInfectionRadius)
   {
-    this.showInfectionRadius = showInfectionRadius;
+    Controller.showInfectionRadius = showInfectionRadius;
     foreach (Person person in people)
     {
       person.UpdateInfectionRadiusVisibility();
@@ -152,8 +172,8 @@ public class Controller : MonoBehaviour
 
   private void InfectInitialPatients()
   {
-    int numCases = Mathf.Min(initialNumberOfCases, people.Count);
-    for (int i = 0; i < numCases; i++)
+    int infectedCount = Mathf.CeilToInt(defaultPercentInfected * numPeople);
+    for (int i = 0; i < infectedCount; i++)
     {
       people[i].SetInfectionStatus(InfectionStatus.INFECTED);
     }
@@ -161,17 +181,19 @@ public class Controller : MonoBehaviour
 
   private void InitializePopulationBreakdown()
   {
+    int infectedCount = Mathf.CeilToInt(defaultPercentInfected * numPeople);
     populationHealthBreakdown = new Dictionary<int, int>();
-    populationHealthBreakdown.Add((int)InfectionStatus.HEALTHY, numPeople - initialNumberOfCases);
-    populationHealthBreakdown.Add((int)InfectionStatus.INFECTED, initialNumberOfCases);
+    populationHealthBreakdown.Add((int)InfectionStatus.HEALTHY, numPeople - infectedCount);
+    populationHealthBreakdown.Add((int)InfectionStatus.INFECTED, infectedCount);
     populationHealthBreakdown.Add((int)InfectionStatus.RECOVERED, 0);
   }
 
   private void StartGraph()
   {
+    int infectedCount = Mathf.CeilToInt(defaultPercentInfected * numPeople);
     graph.SetNumPeople(numPeople);
-    graph.SetNumHealthyPeople(numPeople - initialNumberOfCases);
-    graph.SetNumInfectedPeople(initialNumberOfCases);
+    graph.SetNumHealthyPeople(numPeople - infectedCount);
+    graph.SetNumInfectedPeople(infectedCount);
     graph.SetNumRecoveredPeople(0);
   }
 }
