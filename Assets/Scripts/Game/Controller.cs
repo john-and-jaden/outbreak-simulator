@@ -19,31 +19,6 @@ public class Controller : MonoBehaviour
   // ***** Public variables ***** //
   // **************************** //
 
-  [Header("Defaults")]
-
-  [Tooltip("Default setting for the timescale of the simulation.")]
-  public int defaultTimeScale;
-
-  [Tooltip("Default setting for the total number of people.")]
-  public float defaultNumPeople;
-
-  [Tooltip("Default setting for the initial number of infected people.")]
-  public float defaultPercentInfected;
-
-  [Tooltip("Default setting for the visibility of people's infection radii.")]
-  public bool defaultShowInfectionRadius;
-
-  [Tooltip("Default setting for the max infection radius.")]
-  public float defaultMaxInfectionRadius;
-
-  [Tooltip("Default setting for the time it takes for a person to become fully contagious.")]
-  public float defaultInfectionRadiusGrowthTime;
-
-  [Tooltip("Default setting for the time it takes for an infected person to recover.")]
-  public float defaultRecoveryTime;
-
-  [Space]
-
   [Tooltip("Prefab of the person object to spawn.")]
   public Person personPrefab;
 
@@ -57,6 +32,7 @@ public class Controller : MonoBehaviour
   private List<Person> people;
 
   private int numPeople;
+  private float percentInitiallyInfected;
 
   private Dictionary<int, int> populationHealthBreakdown;
 
@@ -64,7 +40,7 @@ public class Controller : MonoBehaviour
   // ***** Unity functions ***** //
   // *************************** //
 
-  void Start()
+  void Awake()
   {
     if (instance != null)
     {
@@ -72,7 +48,10 @@ public class Controller : MonoBehaviour
     }
     instance = this;
     instance.numPeople = 1;
+  }
 
+  void Start()
+  {
     ClearPeople();
   }
 
@@ -94,6 +73,16 @@ public class Controller : MonoBehaviour
     Controller.timeScale = timeScale;
   }
 
+  public void SetNumPeople(float numPeople)
+  {
+    this.numPeople = (int)numPeople;
+  }
+
+  public void SetPercentInitiallyInfected(float percentInitiallyInfected)
+  {
+    this.percentInitiallyInfected = percentInitiallyInfected;
+  }
+
   public void SetShowInfectionRadius(bool showInfectionRadius)
   {
     Controller.showInfectionRadius = showInfectionRadius;
@@ -103,9 +92,19 @@ public class Controller : MonoBehaviour
     }
   }
 
-  public void SetNumPeople(float numPeople)
+  public void SetMaxInfectionRadius(float maxInfectionRadius)
   {
-    this.numPeople = (int)numPeople;
+    Controller.maxInfectionRadius = maxInfectionRadius;
+  }
+
+  public void SetInfectionRadiusGrowthTime(float infectionRadiusGrowthTime)
+  {
+    Controller.infectionRadiusGrowthTime = infectionRadiusGrowthTime;
+  }
+
+  public void SetRecoveryTime(float recoveryTime)
+  {
+    Controller.recoveryTime = recoveryTime;
   }
 
   public void UpdatePopulationBreakdown(InfectionStatus previousStatus, InfectionStatus newStatus)
@@ -114,8 +113,8 @@ public class Controller : MonoBehaviour
     populationHealthBreakdown[(int)newStatus] = populationHealthBreakdown[(int)newStatus] + 1;
 
     // graph.SetNumHealthyPeople(populationHealthBreakdown[(int)InfectionStatus.HEALTHY]);
-    graph.SetNumInfectedPeople(populationHealthBreakdown[(int)InfectionStatus.INFECTED]);
-    graph.SetNumRecoveredPeople(populationHealthBreakdown[(int)InfectionStatus.RECOVERED]);
+    graph.SetNumInfectedPeople(populationHealthBreakdown[(int)InfectionStatus.Infected]);
+    graph.SetNumRecoveredPeople(populationHealthBreakdown[(int)InfectionStatus.Recovered]);
   }
 
   // ***************************** //
@@ -172,25 +171,26 @@ public class Controller : MonoBehaviour
 
   private void InfectInitialPatients()
   {
-    int infectedCount = Mathf.CeilToInt(defaultPercentInfected * numPeople);
+    Debug.Log(percentInitiallyInfected);
+    int infectedCount = Mathf.CeilToInt(percentInitiallyInfected * numPeople);
     for (int i = 0; i < infectedCount; i++)
     {
-      people[i].SetInfectionStatus(InfectionStatus.INFECTED);
+      people[i].SetInfectionStatus(InfectionStatus.Infected);
     }
   }
 
   private void InitializePopulationBreakdown()
   {
-    int infectedCount = Mathf.CeilToInt(defaultPercentInfected * numPeople);
+    int infectedCount = Mathf.CeilToInt(percentInitiallyInfected * numPeople);
     populationHealthBreakdown = new Dictionary<int, int>();
-    populationHealthBreakdown.Add((int)InfectionStatus.HEALTHY, numPeople - infectedCount);
-    populationHealthBreakdown.Add((int)InfectionStatus.INFECTED, infectedCount);
-    populationHealthBreakdown.Add((int)InfectionStatus.RECOVERED, 0);
+    populationHealthBreakdown.Add((int)InfectionStatus.Healthy, numPeople - infectedCount);
+    populationHealthBreakdown.Add((int)InfectionStatus.Infected, infectedCount);
+    populationHealthBreakdown.Add((int)InfectionStatus.Recovered, 0);
   }
 
   private void StartGraph()
   {
-    int infectedCount = Mathf.CeilToInt(defaultPercentInfected * numPeople);
+    int infectedCount = Mathf.CeilToInt(percentInitiallyInfected * numPeople);
     graph.SetNumPeople(numPeople);
     graph.SetNumHealthyPeople(numPeople - infectedCount);
     graph.SetNumInfectedPeople(infectedCount);

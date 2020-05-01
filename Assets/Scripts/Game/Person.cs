@@ -54,7 +54,7 @@ public class Person : MonoBehaviour
     cc2D = GetComponent<CircleCollider2D>();
 
     // Initialize start values
-    infectionStatus = InfectionStatus.HEALTHY;
+    infectionStatus = InfectionStatus.Healthy;
     direction = new Vector2(Random.Range(-1f, 1f), Random.Range(-1f, 1f)).normalized;
     infectionRadius = cc2D.radius;
     perlinCoordinate = Random.Range(0, 1000);
@@ -70,7 +70,7 @@ public class Person : MonoBehaviour
     Move();
     CollideWithScreenEdges();
 
-    if (infectionStatus == InfectionStatus.INFECTED)
+    if (infectionStatus == InfectionStatus.Infected)
     {
       UpdateInfectionRadius();
       InfectNearbyPeople();
@@ -106,7 +106,7 @@ public class Person : MonoBehaviour
 
   public void UpdateInfectionRadiusVisibility()
   {
-    infectionRadiusRenderer.enabled = Controller.showInfectionRadius && infectionStatus == InfectionStatus.INFECTED;
+    infectionRadiusRenderer.enabled = Controller.showInfectionRadius && infectionStatus == InfectionStatus.Infected;
   }
 
   // ***************************** //
@@ -157,9 +157,9 @@ public class Person : MonoBehaviour
       if (target.TryGetComponent<Person>(out targetPerson))
       {
         // Only infect healthy people
-        if (targetPerson.infectionStatus == InfectionStatus.HEALTHY)
+        if (targetPerson.infectionStatus == InfectionStatus.Healthy)
         {
-          targetPerson.SetInfectionStatus(InfectionStatus.INFECTED);
+          targetPerson.SetInfectionStatus(InfectionStatus.Infected);
         }
       }
     }
@@ -206,17 +206,17 @@ public class Person : MonoBehaviour
     recoveryTimer += Time.deltaTime * Controller.timeScale;
     if (recoveryTimer >= Controller.recoveryTime)
     {
-      SetInfectionStatus(InfectionStatus.RECOVERED);
+      SetInfectionStatus(InfectionStatus.Recovered);
     }
   }
 
   private void UpdateColor()
   {
-    if (infectionStatus == InfectionStatus.INFECTED)
+    if (infectionStatus == InfectionStatus.Infected)
     {
       sr.color = infectedColor;
     }
-    else if (infectionStatus == InfectionStatus.RECOVERED)
+    else if (infectionStatus == InfectionStatus.Recovered)
     {
       sr.color = recoveredColor;
     }

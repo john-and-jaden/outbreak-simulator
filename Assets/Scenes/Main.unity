@@ -214,6 +214,7 @@ GameObject:
   m_Component:
   - component: {fileID: 70760857}
   - component: {fileID: 70760858}
+  - component: {fileID: 70760859}
   m_Layer: 5
   m_Name: Slider
   m_TagString: Untagged
@@ -294,7 +295,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 635752805}
-        m_MethodName: SetNumPeople
+        m_MethodName: SetPercentInitiallyInfected
         m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -315,6 +316,18 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+--- !u!114 &70760859
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 70760856}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5196a596b44790d45960d96b6f4f9694, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &131281611
 GameObject:
   m_ObjectHideFlags: 0
@@ -475,6 +488,7 @@ GameObject:
   m_Component:
   - component: {fileID: 138845017}
   - component: {fileID: 138845018}
+  - component: {fileID: 138845019}
   m_Layer: 5
   m_Name: Slider
   m_TagString: Untagged
@@ -555,7 +569,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 635752805}
-        m_MethodName: SetNumPeople
+        m_MethodName: SetMaxInfectionRadius
         m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -576,6 +590,18 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+--- !u!114 &138845019
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 138845016}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5196a596b44790d45960d96b6f4f9694, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &155406589
 GameObject:
   m_ObjectHideFlags: 0
@@ -2011,13 +2037,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d6e70cd4bc78e9e4ea8bef1307611556, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  defaultTimeScale: 1
-  defaultNumPeople: 1000
-  defaultPercentInfected: 0.1
-  defaultShowInfectionRadius: 1
-  defaultMaxInfectionRadius: 0
-  defaultInfectionRadiusGrowthTime: 0
-  defaultRecoveryTime: 0
   personPrefab: {fileID: 1017537500377173445, guid: fa098ac545abb4c3fab403b85626804c,
     type: 3}
   graph: {fileID: 1419604352}
@@ -2617,6 +2636,7 @@ GameObject:
   m_Component:
   - component: {fileID: 858705285}
   - component: {fileID: 858705286}
+  - component: {fileID: 858705287}
   m_Layer: 5
   m_Name: Slider
   m_TagString: Untagged
@@ -2718,6 +2738,18 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+--- !u!114 &858705287
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 858705284}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5196a596b44790d45960d96b6f4f9694, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &862489433
 GameObject:
   m_ObjectHideFlags: 0
@@ -3483,6 +3515,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1121101841}
   - component: {fileID: 1121101842}
+  - component: {fileID: 1121101843}
   m_Layer: 5
   m_Name: Slider
   m_TagString: Untagged
@@ -3563,7 +3596,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 635752805}
-        m_MethodName: SetNumPeople
+        m_MethodName: SetRecoveryTime
         m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -3584,6 +3617,18 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+--- !u!114 &1121101843
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1121101840}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5196a596b44790d45960d96b6f4f9694, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1135149102
 GameObject:
   m_ObjectHideFlags: 0
@@ -3594,6 +3639,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1135149103}
   - component: {fileID: 1135149104}
+  - component: {fileID: 1135149105}
   m_Layer: 5
   m_Name: Slider
   m_TagString: Untagged
@@ -3674,7 +3720,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 635752805}
-        m_MethodName: SetNumPeople
+        m_MethodName: SetInfectionRadiusGrowthTime
         m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -3695,6 +3741,18 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+--- !u!114 &1135149105
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1135149102}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5196a596b44790d45960d96b6f4f9694, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1144490516
 GameObject:
   m_ObjectHideFlags: 0
@@ -3884,6 +3942,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1202983749}
   - component: {fileID: 1202983750}
+  - component: {fileID: 1202983751}
   m_Layer: 5
   m_Name: Slider
   m_TagString: Untagged
@@ -3985,6 +4044,18 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+--- !u!114 &1202983751
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1202983748}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5196a596b44790d45960d96b6f4f9694, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1239627219
 GameObject:
   m_ObjectHideFlags: 0

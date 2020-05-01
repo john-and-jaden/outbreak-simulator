@@ -1,4 +1,4 @@
 ﻿public enum InfectionStatus
 {
-  HEALTHY = 0, INFECTED = 1, RECOVERED = 2
+  Healthy = 0, Infected = 1, Recovered = 2
 }

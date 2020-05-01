@@ -14,7 +14,7 @@ public class DynamicLabel : MonoBehaviour
 
   private Text textComponent;
 
-  void Start()
+  void Awake()
   {
     textComponent = GetComponent<Text>();
   }
