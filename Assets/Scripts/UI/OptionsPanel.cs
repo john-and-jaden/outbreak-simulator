@@ -12,6 +12,7 @@ public class OptionsPanel : MonoBehaviour, IPointerEnterHandler, IPointerExitHan
 
   public void OnPointerEnter(PointerEventData eventData)
   {
+    Debug.Log("yeet");
     if (!isOpen)
     {
       buttonAnimator.SetBool("IsExtended", true);

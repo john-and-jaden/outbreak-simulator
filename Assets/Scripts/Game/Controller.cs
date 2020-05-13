@@ -22,9 +22,6 @@ public class Controller : MonoBehaviour
   [Tooltip("Prefab of the person object to spawn.")]
   public Person personPrefab;
 
-  [Tooltip("The statistics graph UI object.")]
-  public Graph graph;
-
   // ***************************** //
   // ***** Private variables ***** //
   // ***************************** //
@@ -34,8 +31,6 @@ public class Controller : MonoBehaviour
   private int numPeople;
   private float percentInitiallyInfected;
   private float percentSocialDistancing;
-
-  private Dictionary<int, int> populationHealthBreakdown;
 
   // *************************** //
   // ***** Unity functions ***** //
@@ -49,8 +44,8 @@ public class Controller : MonoBehaviour
     }
     instance = this;
     instance.numPeople = 1;
-    
-    ClearPeople();
+
+    people = new List<Person>();
   }
 
   // **************************** //
@@ -59,10 +54,8 @@ public class Controller : MonoBehaviour
 
   public void StartSimulation()
   {
-    InitializePopulationBreakdown();
     ClearPeople();
     SpawnPeople();
-    StartGraph();
     InfectInitialPatients();
     SociallyDistancePeople();
   }
@@ -111,14 +104,19 @@ public class Controller : MonoBehaviour
     Controller.recoveryTime = recoveryTime;
   }
 
-  public void UpdatePopulationBreakdown(InfectionStatus previousStatus, InfectionStatus newStatus)
+  public Dictionary<InfectionStatus, float> GetPopulationStatusRates()
   {
-    populationHealthBreakdown[(int)previousStatus] = populationHealthBreakdown[(int)previousStatus] + -1;
-    populationHealthBreakdown[(int)newStatus] = populationHealthBreakdown[(int)newStatus] + 1;
-
-    // graph.SetNumHealthyPeople(populationHealthBreakdown[(int)InfectionStatus.HEALTHY]);
-    graph.SetNumInfectedPeople(populationHealthBreakdown[(int)InfectionStatus.Infected]);
-    graph.SetNumRecoveredPeople(populationHealthBreakdown[(int)InfectionStatus.Recovered]);
+    Dictionary<InfectionStatus, float> statusRates = new Dictionary<InfectionStatus, float>();
+    foreach (Person person in people)
+    {
+      InfectionStatus status = person.GetInfectionStatus();
+      if (!statusRates.ContainsKey(status))
+      {
+        statusRates.Add(status, 0);
+      }
+      statusRates[status] += 1.0f / people.Count;
+    }
+    return statusRates;
   }
 
   // ***************************** //
@@ -205,23 +203,5 @@ public class Controller : MonoBehaviour
         distancingCount--;
       }
     }
-  }
-
-  private void InitializePopulationBreakdown()
-  {
-    int infectedCount = Mathf.CeilToInt(percentInitiallyInfected * numPeople);
-    populationHealthBreakdown = new Dictionary<int, int>();
-    populationHealthBreakdown.Add((int)InfectionStatus.Healthy, numPeople - infectedCount);
-    populationHealthBreakdown.Add((int)InfectionStatus.Infected, infectedCount);
-    populationHealthBreakdown.Add((int)InfectionStatus.Recovered, 0);
-  }
-
-  private void StartGraph()
-  {
-    int infectedCount = Mathf.CeilToInt(percentInitiallyInfected * numPeople);
-    graph.SetNumPeople(numPeople);
-    graph.SetNumHealthyPeople(numPeople - infectedCount);
-    graph.SetNumInfectedPeople(infectedCount);
-    graph.SetNumRecoveredPeople(0);
   }
 }

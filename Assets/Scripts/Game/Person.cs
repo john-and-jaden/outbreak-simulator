@@ -95,14 +95,17 @@ public class Person : MonoBehaviour
   // ***** Public functions ***** //
   // **************************** //
 
+  public InfectionStatus GetInfectionStatus()
+  {
+    return infectionStatus;
+  }
+
   public void SetInfectionStatus(InfectionStatus newStatus)
   {
     InfectionStatus previousStatus = infectionStatus;
     infectionStatus = newStatus;
     UpdateColor();
     UpdateInfectionRadiusVisibility();
-
-    Controller.instance.UpdatePopulationBreakdown(previousStatus, newStatus);
   }
 
   public void SetSociallyDistancing()
