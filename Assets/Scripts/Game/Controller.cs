@@ -49,10 +49,7 @@ public class Controller : MonoBehaviour
     }
     instance = this;
     instance.numPeople = 1;
-  }
-
-  void Start()
-  {
+    
     ClearPeople();
   }
 
