@@ -29,6 +29,7 @@ public class Person : MonoBehaviour
 
   private InfectionStatus infectionStatus;
   private Vector3 direction;
+  private bool isSocialDistancing;
   private float infectionRadius;
   private float infectionRadiusGrowthTimer;
   private float perlinCoordinate;
@@ -104,6 +105,11 @@ public class Person : MonoBehaviour
     Controller.instance.UpdatePopulationBreakdown(previousStatus, newStatus);
   }
 
+  public void SetSociallyDistancing()
+  {
+    isSocialDistancing = true;
+  }
+
   public void UpdateInfectionRadiusVisibility()
   {
     infectionRadiusRenderer.enabled = Controller.showInfectionRadius && infectionStatus == InfectionStatus.Infected;
@@ -115,6 +121,11 @@ public class Person : MonoBehaviour
 
   private void Move()
   {
+    if (isSocialDistancing)
+    {
+      return;
+    }
+
     float timeStep = Time.deltaTime * Controller.timeScale;
     // The value used to move through perlin coordinates - bigger is more chaotic
     perlinCoordinate += timeStep;

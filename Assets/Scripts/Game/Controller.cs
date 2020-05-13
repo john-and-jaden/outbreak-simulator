@@ -33,6 +33,7 @@ public class Controller : MonoBehaviour
 
   private int numPeople;
   private float percentInitiallyInfected;
+  private float percentSocialDistancing;
 
   private Dictionary<int, int> populationHealthBreakdown;
 
@@ -66,6 +67,7 @@ public class Controller : MonoBehaviour
     SpawnPeople();
     StartGraph();
     InfectInitialPatients();
+    SociallyDistancePeople();
   }
 
   public void SetTimescale(float timeScale)
@@ -81,6 +83,11 @@ public class Controller : MonoBehaviour
   public void SetPercentInitiallyInfected(float percentInitiallyInfected)
   {
     this.percentInitiallyInfected = percentInitiallyInfected;
+  }
+
+  public void SetPercentSocialDistancing(float percentSocialDistancing)
+  {
+    this.percentSocialDistancing = percentSocialDistancing;
   }
 
   public void SetShowInfectionRadius(bool showInfectionRadius)
@@ -171,11 +178,35 @@ public class Controller : MonoBehaviour
 
   private void InfectInitialPatients()
   {
-    Debug.Log(percentInitiallyInfected);
     int infectedCount = Mathf.CeilToInt(percentInitiallyInfected * numPeople);
-    for (int i = 0; i < infectedCount; i++)
+    
+    bool[] isInfected = new bool[numPeople];
+    while (infectedCount > 0)
     {
-      people[i].SetInfectionStatus(InfectionStatus.Infected);
+      int i = Random.Range(0, numPeople);
+      if (!isInfected[i])
+      {
+        isInfected[i] = true;
+        people[i].SetInfectionStatus(InfectionStatus.Infected);
+        infectedCount--;
+      }
+    }
+  }
+
+  private void SociallyDistancePeople()
+  {
+    int distancingCount = Mathf.CeilToInt(percentSocialDistancing * numPeople);
+
+    bool[] isDistancing = new bool[numPeople];
+    while (distancingCount > 0)
+    {
+      int i = Random.Range(0, numPeople);
+      if (!isDistancing[i])
+      {
+        isDistancing[i] = true;
+        people[i].SetSociallyDistancing();
+        distancingCount--;
+      }
     }
   }
 
