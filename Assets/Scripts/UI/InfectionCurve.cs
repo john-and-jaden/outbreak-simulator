@@ -4,17 +4,18 @@ using UnityEngine;
 using UnityEngine.UI;
 using CodeMonkey.Utils;
 
-public class Window_Graph : MonoBehaviour
+public class InfectionCurve : MonoBehaviour
 {
   [SerializeField] private Sprite circleSprite;
   private RectTransform graphContainer;
+
+  private List<int> valueList;
 
   private void Awake()
   {
     graphContainer = transform.Find("graphContainer").GetComponent<RectTransform>();
 
-    List<int> valueList = new List<int>() { 1, 4, 8, 16, 32, 64 };
-    ShowGraph(valueList);
+    valueList = new List<int>();
   }
 
   private GameObject CreateCircle(Vector2 anchoredPosition)
@@ -63,5 +64,11 @@ public class Window_Graph : MonoBehaviour
     rectTransform.sizeDelta = new Vector2(distance, 3f);
     rectTransform.anchoredPosition = dotPositionA + dir * distance * .5f;
     rectTransform.localEulerAngles = new Vector3(0, 0, UtilsClass.GetAngleFromVectorFloat(dir));
+  }
+
+  public void AddPointToGraph(int value)
+  {
+    valueList.Add(value);
+    ShowGraph(valueList);
   }
 }

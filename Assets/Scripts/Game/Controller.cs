@@ -47,8 +47,11 @@ public class Controller : MonoBehaviour
   [Tooltip("Prefab of the person object to spawn.")]
   public Person personPrefab;
 
-  [Tooltip("The statistics graph UI object.")]
+  [Tooltip("The status bar UI object.")]
   public Graph graph;
+
+  [Tooltip("The infection curve UI object.")]
+  public InfectionCurve infectionCurve;
 
   // ***************************** //
   // ***** Private variables ***** //
@@ -59,6 +62,9 @@ public class Controller : MonoBehaviour
   private int numPeople;
 
   private Dictionary<int, int> populationHealthBreakdown;
+
+  public int infectionCurveTimeInterval;
+  public float infectionCurveTimer;
 
   // *************************** //
   // ***** Unity functions ***** //
@@ -76,6 +82,17 @@ public class Controller : MonoBehaviour
     ClearPeople();
   }
 
+  void Update()
+  {
+    infectionCurveTimer += Time.deltaTime;
+
+    if (infectionCurveTimer >= infectionCurveTimeInterval)
+    {
+      infectionCurveTimer = 0;
+      infectionCurve.AddPointToGraph(populationHealthBreakdown[(int)InfectionStatus.INFECTED] / numPeople * 100);
+    }
+  }
+
   // **************************** //
   // ***** Public functions ***** //
   // **************************** //
@@ -87,6 +104,7 @@ public class Controller : MonoBehaviour
     SpawnPeople();
     StartGraph();
     InfectInitialPatients();
+    infectionCurveTimeInterval = 1;
   }
 
   public void SetTimescale(float timeScale)

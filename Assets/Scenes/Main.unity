@@ -2094,6 +2094,9 @@ MonoBehaviour:
   personPrefab: {fileID: 1017537500377173445, guid: fa098ac545abb4c3fab403b85626804c,
     type: 3}
   graph: {fileID: 1419604352}
+  infectionCurve: {fileID: 1216728183}
+  infectionCurveTimeInterval: 0
+  infectionCurveTimer: 0
 --- !u!4 &635752806
 Transform:
   m_ObjectHideFlags: 0
@@ -4105,7 +4108,7 @@ GameObject:
   - component: {fileID: 1216728182}
   - component: {fileID: 1216728183}
   m_Layer: 5
-  m_Name: Window_Graph
+  m_Name: InfectionCurve
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4742,7 +4745,7 @@ GameObject:
   - component: {fileID: 1419604351}
   - component: {fileID: 1419604352}
   m_Layer: 5
-  m_Name: Graph
+  m_Name: StatusDIsplay
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
